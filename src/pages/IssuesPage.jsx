@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 function IssuesPage() {
 
@@ -9,8 +11,9 @@ function IssuesPage() {
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("TO_DO");
     const [priority, setPriority] = useState("LOW");
+    const [loading, setLoading] = useState(false);
 
-
+    const navigate = useNavigate();
     const { id } = useParams();
 
     const handleDeleteIssue = (issueId) => {
@@ -45,6 +48,7 @@ function IssuesPage() {
 
 
 useEffect(() => {
+    setLoading(true);
     fetch(`http://localhost:8080/api/issues/project/${id}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -52,20 +56,28 @@ useEffect(() => {
     })  .then((response) => response.json())
         .then((data) => {
             setIssues(data);
+            setLoading(false);
         });     
 }, [id]);
 
 
   return (
     <div>
+        <Navbar />
       <h1>Issues Page</h1>
+        {loading && <p>Loading issues...</p>}
+      <button onClick={() => navigate("/projects")}>Back to projects</button>
       
         {issues.map((issue) => (
             <div key={issue.id}>
+                <Link to={`/issues/${issue.id}`}>
                 <h2>{`Title: ${issue.title}`}</h2>
-                <h4>{`Status: ${issue.status}, Priority: ${issue.priority}`}</h4>
-                <p>{issue.description}</p>
+                </Link>
                 <button onClick={() => handleDeleteIssue(issue.id)}>delete</button>
+                <h4>{`Status: ${issue.status}, Priority: ${issue.priority}`}</h4>
+                <p>{`Description: ${issue.description}`}</p>
+                
+                
             </div>
         ))}
 

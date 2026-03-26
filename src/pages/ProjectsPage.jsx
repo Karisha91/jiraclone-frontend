@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 function ProjectsPage() {
 
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
 
 
   const handleDelete = (id) => {
@@ -38,6 +40,7 @@ function ProjectsPage() {
 
 
   useEffect(() => {
+    setLoading(true);
     fetch("http://localhost:8080/api/projects", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -46,14 +49,17 @@ function ProjectsPage() {
       .then((response) => response.json())
       .then((data) => {
         setProjects(data);
+        setLoading(false);
       });
   }, []);
 
   
   return (
     <div>
+      <Navbar />
       <h1>Projects</h1>
       <p>This is the Projects page.</p>
+      {loading && <p>Loading projects...</p>}
       {projects.map((project) => (
         <div key={project.id}>
           <Link to={`/projects/${project.id}/issues`}>

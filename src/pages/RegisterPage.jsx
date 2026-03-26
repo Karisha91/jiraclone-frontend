@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import "./RegisterPage.css";
 
 function RegisterPage() {
 
-    const navigate = useNavigate();
+const navigate = useNavigate();
 
 const [username, setUsername] = useState("");
 const [password, setPassword] = useState("");
@@ -30,9 +32,10 @@ const handleRegister = (e) => {
 
 
     return (
-        <div>
-            <h1>Register Page</h1>
-            <p>This is the Register page.</p>
+        <div className="register-container">
+            <div className="register-card">
+             <h1>Register</h1>
+            
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleRegister}>
                     
@@ -42,9 +45,12 @@ const handleRegister = (e) => {
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="USER">User</option>
                     <option value="ADMIN">Admin</option>
+                    <option value="DEVELOPER">Developer</option>
                 </select>
                 <button type="submit">Register</button>
+                <Link to = "/login">Have accaunt? Login</Link>
             </form>
+            </div>
         </div>
     );
 }
