@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./Projects.css";
+import { deleteProject, createProject, getProjects } from "../services/ProjectService";
 
 function ProjectsPage() {
 
@@ -10,29 +11,14 @@ function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
-  const handleDelete = (id) => {
-    fetch(`http://localhost:8080/api/projects/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then(() => {
+    const handleDelete =(id) => deleteProject(id).then(() => {
       setProjects(projects.filter((project) => project.id !== id));
     });
-  };
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/api/projects", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: projectName, description }),
-    })
+    createProject(projectName, description)
       .then((response) => response.json())
       .then((data) => {
         setProjects([...projects, data]);
@@ -42,11 +28,7 @@ function ProjectsPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:8080/api/projects", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    getProjects()
       .then((response) => response.json())
       .then((data) => {
         setProjects(data);
@@ -62,6 +44,7 @@ function ProjectsPage() {
       <div className="projects-card">
         <h1>Projects</h1>
         {loading && <p>Loading projects...</p>}
+        {!loading && projects.length === 0 && <p>No projects found. Please add a new project.</p>}
         {projects.map((project) => (
           <div key={project.id} className="project-item">
             <Link to={`/projects/${project.id}/issues`}>
@@ -75,7 +58,7 @@ function ProjectsPage() {
           <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
           <button type="submit">Add Project</button>
         </form>
-      </div>``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+      </div>
     </div>
   </div>
 );

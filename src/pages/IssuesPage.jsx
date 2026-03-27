@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./IssuesPage.css";
+import { deleteIssue, getIssuesByProjectId, createIssue } from "../services/IssueService";
 
 function IssuesPage() {
   const [issues, setIssues] = useState([]);
@@ -17,32 +18,14 @@ function IssuesPage() {
   const { id } = useParams();
 
   const handleDeleteIssue = (issueId) => {
-    fetch(`http://localhost:8080/api/issues/${issueId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then(() => {
+    deleteIssue(issueId).then(() => {
       setIssues(issues.filter((issue) => issue.id !== issueId));
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/api/issues", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        description,
-        status,
-        priority,
-        project: { id: id },
-      }),
-    })
+    createIssue(title, description, status, priority, id)
       .then((response) => response.json())
       .then((data) => {
         setIssues([...issues, data]);
@@ -53,11 +36,7 @@ function IssuesPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:8080/api/issues/project/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+      getIssuesByProjectId(id)
       .then((response) => response.json())
       .then((data) => {
         setIssues(data);
@@ -72,6 +51,7 @@ function IssuesPage() {
         <div className="issues-card">
           <h1>Issues Page</h1>
           {loading && <p>Loading issues...</p>}
+          {!loading && issues.length === 0 && <p>No issues found for this project. Please add a new issue.</p>}
           <button className="delete-btn" onClick={() => navigate("/projects")}>
             Back to projects
           </button>
