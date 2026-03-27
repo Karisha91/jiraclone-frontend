@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import "./Projects.css";
 
 function ProjectsPage() {
 
@@ -54,39 +55,30 @@ function ProjectsPage() {
   }, []);
 
   
-  return (
-    <div>
-      <Navbar />
-      <h1>Projects</h1>
-      <p>This is the Projects page.</p>
-      {loading && <p>Loading projects...</p>}
-      {projects.map((project) => (
-        <div key={project.id}>
-          <Link to={`/projects/${project.id}/issues`}>
-            {project.projectName}
-          </Link>
-          <button onClick={() => handleDelete(project.id)}>Delete</button>
-        </div>
-      ))}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Project Name"
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <button type="submit">Submit</button>
-      </form>
+ return (
+  <div>
+    <Navbar />
+    <div className="projects-container">
+      <div className="projects-card">
+        <h1>Projects</h1>
+        {loading && <p>Loading projects...</p>}
+        {projects.map((project) => (
+          <div key={project.id} className="project-item">
+            <Link to={`/projects/${project.id}/issues`}>
+              {project.projectName}
+            </Link>
+            <button className="delete-btn" onClick={() => handleDelete(project.id)}>Delete</button>
+          </div>
+        ))}
+        <form onSubmit={handleSubmit}>
+          <input type="text" placeholder="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+          <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <button type="submit">Add Project</button>
+        </form>
+      </div>``````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
     </div>
-  );
+  </div>
+);
 }
 
 export default ProjectsPage;

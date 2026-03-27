@@ -1,0 +1,79 @@
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1a1a2e;
+}
+.projects-card {
+    background: #16213e;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.projects-card h1 {
+    color: #e0e0e0;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.projects-card input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #0f3460;
+    background-color: #0f3460;
+    color: #e0e0e0;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.projects-card button {
+    width: 100%;
+    padding: 10px;
+    background-color: #e94560;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.projects-card button:hover {
+    background-color: #c73652;
+}
+.projects-card a {
+    color: #e94560;
+    text-align: center;
+    font-size: 34px;
+    text-decoration: none;
+}
+
+.projects-card a:hover {
+    text-decoration: underline;
+}
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #0f3460;
+}
+
+.project-item a {
+    color: #e0e0e0;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.project-item a:hover {
+    color: #e94560;
+}
+
+.delete-btn {
+    width: auto !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+}
