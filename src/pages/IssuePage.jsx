@@ -15,6 +15,7 @@ function IssuePage() {
     const [error, setError] = useState("");
     const { id } = useParams();
     const [comments, setComments] = useState([]);
+    const [createComment, setCreateComment] = useState("");
 
 useEffect(() => {
     getIssueById(id)
@@ -30,6 +31,24 @@ useEffect(() => {
     
 }, [id]);
 
+
+const addComment = () => {
+    fetch("http://localhost:8080/api/comments", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: createComment, issue: { id: issue.id } }),
+    }).then((res) => {
+        if (res.ok) {
+            res.json().then((data) => {
+                setComments([...comments, data]);
+                setCreateComment("");
+            });
+        }
+    });
+};
 
 
 const update = () => {
@@ -87,15 +106,20 @@ const update = () => {
                 
             )}
             <div>
-                <p>Comments count: {comments.length}</p>
+                
                 {comments.map((comment) => (
                     <div key={comment.id} className="comment-item">
                         <p>{comment.content}</p> 
                         <p>{new Date(comment.createdAt).toLocaleString()}</p>
+                        <p>{comment.author}</p>
+
                         
                     </div>
                 ))}
             </div>
+            
+            <input type="text" value={createComment} onChange={(e) => setCreateComment(e.target.value)} />
+            <button placeholder="Enter comment..." onClick={addComment}>Add comment</button>
             </div>
             </div>
             
