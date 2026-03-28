@@ -53,3 +53,11 @@ export const getIssueById = (id) => {
         }
     });
 };
+
+export const getCommentsByIssueId = (id) => {
+ return fetch(`http://localhost:8080/api/comments/${id}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    })
+  }

@@ -1,15 +1,20 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { use, useEffect, useState } from "react";
+import { data, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { getIssueById, updateIssue } from "../services/IssueService";
+import { getCommentsByIssueId, getIssueById, updateIssue } from "../services/IssueService";
+import "./IssuePage.css";
+import { useNavigate } from "react-router-dom";
+
 
 
 
 function IssuePage() {
     const [issue, setIssue] = useState(null);
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [error, setError] = useState("");
     const { id } = useParams();
+    const [comments, setComments] = useState([]);
 
 useEffect(() => {
     getIssueById(id)
@@ -17,6 +22,14 @@ useEffect(() => {
     .then(data => setIssue(data))
     
 }, []);
+
+useEffect(() => {
+    getCommentsByIssueId(id)
+    .then(response => response.json())
+    .then(data => setComments(data))
+    
+}, [id]);
+
 
 
 const update = () => {
@@ -35,6 +48,8 @@ const update = () => {
     return (
         <div>
             <Navbar />
+            <div className="issue-container">
+                <div className="issue-card">
             <h1>Issue Page</h1>
             {error && <p style={{ color: "green" }}>{error}</p>}
                 
@@ -46,6 +61,7 @@ const update = () => {
                     <p>Status: {issue.status}</p>
                     <p>Priority: {issue.priority}</p>
                     <button onClick={() => setIsEditing(true)}>Edit issue</button>
+                    <button onClick={() => navigate(`/projects/${issue.projectId}/issues`)}>Back to Issues</button>
                 </div>  
             )}
             {isEditing && (
@@ -68,8 +84,22 @@ const update = () => {
                     
                 </div>
                 
+                
             )}
-
+            <div>
+                <p>Comments count: {comments.length}</p>
+                {comments.map((comment) => (
+                    <div key={comment.id} className="comment-item">
+                        <p>{comment.content}</p> 
+                        <p>{new Date(comment.createdAt).toLocaleString()}</p>
+                        
+                    </div>
+                ))}
+            </div>
+            </div>
+            </div>
+            
+            
         </div>
     );
 }
