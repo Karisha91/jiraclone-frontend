@@ -13,9 +13,16 @@ function IssuesPage() {
   const [status, setStatus] = useState("TO_DO");
   const [priority, setPriority] = useState("LOW");
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState("ALL");
+  const [filterPriority, setFilterPriority] = useState("ALL");
 
   const navigate = useNavigate();
   const { id } = useParams();
+
+
+  const filteredIssues = filter === "ALL" ? issues : issues.filter((issue) => issue.status === filter); 
+  const filteredIssuesByPriority = filterPriority === "ALL" ? filteredIssues : filteredIssues.filter((issue) => issue.priority === filterPriority);
+  
 
   const handleDeleteIssue = (issueId) => {
     deleteIssue(issueId).then(() => {
@@ -31,6 +38,8 @@ function IssuesPage() {
         setIssues([...issues, data]);
         setTitle("");
         setDescription("");
+        setFilter("ALL");
+        setFilterPriority("ALL");
       });
   };
 
@@ -55,8 +64,21 @@ function IssuesPage() {
           <button className="delete-btn" onClick={() => navigate("/projects")}>
             Back to projects
           </button>
-
-          {issues.map((issue) => (
+          <div className="filter-buttons">
+          <button className={`filter-btn ${filter === "ALL" ? "active" : ""}`} onClick={() => setFilter("ALL")}>All</button>
+          <button className={`filter-btn ${filter === "TO_DO" ? "active" : ""}`} onClick={() => setFilter("TO_DO")}>To Do</button>
+          <button className={`filter-btn ${filter === "IN_PROGRESS" ? "active" : ""}`} onClick={() => setFilter("IN_PROGRESS")}>In Progress</button>
+          <button className={`filter-btn ${filter === "IN_REVIEW" ? "active" : ""}`} onClick={() => setFilter("IN_REVIEW")}>In Review</button>
+          <button className={`filter-btn ${filter === "DONE" ? "active" : ""}`} onClick={() => setFilter("DONE")}>Done</button>
+          </div>
+          <div className="filter-buttons">
+            <button className={`filter-btn ${filterPriority === "ALL" ? "active" : ""}`} onClick={() => setFilterPriority("ALL")}>All Priorities</button>
+            <button className={`filter-btn ${filterPriority === "LOW" ? "active" : ""}`} onClick={() => setFilterPriority("LOW")}>Low</button>
+            <button className={`filter-btn ${filterPriority === "MEDIUM" ? "active" : ""}`} onClick={() => setFilterPriority("MEDIUM")}>Medium</button>
+            <button className={`filter-btn ${filterPriority === "HIGH" ? "active" : ""}`} onClick={() => setFilterPriority("HIGH")}>High</button>
+            <button className={`filter-btn ${filterPriority === "CRITICAL" ? "active" : ""}`} onClick={() => setFilterPriority("CRITICAL")}>Critical</button>
+          </div>
+          {filteredIssuesByPriority.map((issue) => (
             <div key={issue.id} className="issues-item">
               <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
               <div className="issue-meta">

@@ -131,3 +131,21 @@
     background-color: #c73652;
     color: white;
 }
+.filter-btn {
+    width: auto !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+}
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.filter-btn:hover {
+    background-color: #c73652;
+    color: white;
+}
+.filter-btn.active {
+    background-color: white;
+    color: #1a1a2e;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { getIssueById, updateIssue } from "../services/IssueService";
 
 
 
@@ -11,26 +12,16 @@ function IssuePage() {
     const { id } = useParams();
 
 useEffect(() => {
-    fetch(`http://localhost:8080/api/issues/${id}`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    })
+    getIssueById(id)
     .then(response => response.json())
     .then(data => setIssue(data))
     
 }, []);
 
 
-const updateIssue = () => {
-    fetch(`http://localhost:8080/api/issues/${id}`, {
-        method: "PUT",
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title: issue.title, description: issue.description, status: issue.status, priority: issue.priority }),
-    }).then((res) => {
+const update = () => {
+    updateIssue(issue.title, issue.description, issue.status, issue.priority, issue.id)
+    .then((res) => {
         if (res.ok) {
             setError("Update successful");
             setIsEditing(false);
@@ -73,7 +64,7 @@ const updateIssue = () => {
                         <option value="HIGH">High</option>
                         <option value="CRITICAL">Critical</option>
                     </select>
-                    <button onClick={updateIssue}>Save Changes</button>
+                    <button onClick={update}>Save Changes</button>
                     
                 </div>
                 
