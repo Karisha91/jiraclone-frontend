@@ -7,6 +7,8 @@ import ProjectsPage from "./pages/ProjectsPage";
 import IssuesPage from "./pages/IssuesPage";
 import RegisterPage from "./pages/RegisterPage";
 import IssuePage from "./pages/IssuePage";
+import { Navigate } from "react-router-dom";
+
 
 function App() {
   return (
