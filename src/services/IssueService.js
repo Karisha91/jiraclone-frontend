@@ -1,7 +1,7 @@
 
 
 export const getIssuesByProjectId = (id) => {
-    return fetch(`http://localhost:8080/api/issues/project/${id}`, {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/issues/project/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -9,7 +9,7 @@ export const getIssuesByProjectId = (id) => {
 };
 
 export const deleteIssue = (issueId) => {
-    return fetch(`http://localhost:8080/api/issues/${issueId}`, {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/issues/${issueId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -18,7 +18,7 @@ export const deleteIssue = (issueId) => {
 };
 
 export const createIssue = (title, description, status, priority, id) => {
-    return fetch("http://localhost:8080/api/issues", {
+    return fetch("${import.meta.env.VITE_API_URL}/api/issues", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -36,7 +36,7 @@ export const createIssue = (title, description, status, priority, id) => {
 
 
 export const updateIssue = (title, description, status, priority, id) => {
-    return fetch(`http://localhost:8080/api/issues/${id}`, {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/issues/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -47,7 +47,7 @@ export const updateIssue = (title, description, status, priority, id) => {
 };
 
 export const getIssueById = (id) => {
-    return fetch(`http://localhost:8080/api/issues/${id}`, {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/issues/${id}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -55,7 +55,7 @@ export const getIssueById = (id) => {
 };
 
 export const getCommentsByIssueId = (id) => {
- return fetch(`http://localhost:8080/api/comments/${id}`, {
+ return fetch(`${import.meta.env.VITE_API_URL}/api/comments/${id}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }

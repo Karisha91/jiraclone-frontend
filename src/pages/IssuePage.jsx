@@ -33,7 +33,7 @@ useEffect(() => {
 
 
 const addComment = () => {
-    fetch("http://localhost:8080/api/comments", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

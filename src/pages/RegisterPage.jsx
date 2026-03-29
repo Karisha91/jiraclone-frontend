@@ -15,7 +15,7 @@ const [error, setError] = useState("");
 
 const handleRegister = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
