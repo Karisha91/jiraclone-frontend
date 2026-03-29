@@ -18,7 +18,7 @@ export const deleteIssue = (issueId) => {
 };
 
 export const createIssue = (title, description, status, priority, id) => {
-    return fetch("${import.meta.env.VITE_API_URL}/api/issues", {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
