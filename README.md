@@ -1,16 +1,80 @@
-# React + Vite
+# Jira Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack project management application inspired by Jira, built from scratch with Spring Boot and React.
 
-Currently, two official plugins are available:
+🔗 **Live Demo:** [jiraclone-frontend.vercel.app](https://jiraclone-frontend.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Screenshots
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> Add screenshots here
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+**Backend**
+- Java 21
+- Spring Boot 3.5
+- Spring Security + JWT Authentication
+- PostgreSQL
+- Hibernate / JPA
+- Railway (deployment)
+
+**Frontend**
+- React 18
+- Vite
+- React Router
+- CSS (custom dark theme)
+- Vercel (deployment)
+
+---
+
+## Features
+
+- JWT Authentication (Login / Register)
+- Protected Routes
+- Projects — Create, view, delete
+- Issues — Create, view, edit, delete with status and priority badges
+- Filter issues by status and priority
+- Comments — Add and delete comments on issues
+- Dashboard with live stats (total projects, issues by status)
+- Fully deployed and production ready
+
+---
+
+## Repositories
+
+- Frontend: [github.com/Karisha91/jiraclone-frontend](https://github.com/Karisha91/jiraclone-frontend)
+- Backend: [github.com/Karisha91/jiraclone](https://github.com/Karisha91/jiraclone)
+
+---
+
+## Running Locally
+
+**Backend**
+```bash
+git clone https://github.com/Karisha91/jiraclone
+cd jiraclone
+# Set up PostgreSQL and update application.properties
+./mvnw spring-boot:run
+```
+
+**Frontend**
+```bash
+git clone https://github.com/Karisha91/jiraclone-frontend
+cd jiraclone-frontend
+npm install
+# Create .env file with VITE_API_URL=http://localhost:8080
+npm run dev
+```
+
+---
+
+## Author
+
+Ivan — Career changer from retail management to full-stack development.
+Self-taught, 8 months of coding experience.
+
+- GitHub: [github.com/Karisha91](https://github.com/Karisha91)
