@@ -85,3 +85,22 @@
     font-size: 11px !important;
     align-self: flex-end;
 }
+.issue-card h2 {
+    color: #e0e0e0;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.issue-detail {
+    color: #a0a0a0;
+    font-size: 13px;
+}
+
+.issue-status {
+    color: #e0e0e0;
+    font-size: 13px;
+    background-color: #0f3460;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}

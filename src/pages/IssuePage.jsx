@@ -87,9 +87,9 @@ function IssuePage() {
           {issue && (
             <div>
               <h2>{issue.title}</h2>
-              <p>{issue.description}</p>
-              <p>Status: {issue.status}</p>
-              <p>Priority: {issue.priority}</p>
+              <p className="issue-detail">{issue.description}</p>
+              <p className="issue-status">Status: {issue.status}</p>
+              <p className="issue-status">Priority: {issue.priority}</p>
               <button onClick={() => setIsEditing(true)}>Edit issue</button>
               <button
                 onClick={() => navigate(`/projects/${issue.projectId}/issues`)}
