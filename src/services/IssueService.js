@@ -61,3 +61,20 @@ export const getCommentsByIssueId = (id) => {
         }
     })
   }
+
+  export const deleteComment = (commentId) => {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+}
+
+export const getAllIssues = () => {
+    return fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    });
+}

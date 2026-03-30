@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from "react";
 import { data, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { getCommentsByIssueId, getIssueById, updateIssue } from "../services/IssueService";
+import { getCommentsByIssueId, getIssueById, updateIssue, deleteComment } from "../services/IssueService";
 import "./IssuePage.css";
 import { useNavigate } from "react-router-dom";
 
@@ -43,6 +43,8 @@ const addComment = () => {
     }).then((res) => {
         if (res.ok) {
             res.json().then((data) => {
+                console.log(data);
+                
                 setComments([...comments, data]);
                 setCreateComment("");
             });
@@ -64,13 +66,9 @@ const update = () => {
     });
 }
 
-const deleteComment = (commentId) => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}`, {
-        method: "DELETE",
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-    }).then((res) => {
+const deleteCom = (commentId) => {
+    deleteComment(commentId)
+    .then((res) => {
         if (res.ok) {
             setComments(comments.filter((comment) => comment.id !== commentId));
         }
@@ -123,9 +121,10 @@ const deleteComment = (commentId) => {
                 
                 {comments.map((comment) => (
                     <div key={comment.id} className="comment-item">
-                        <p>{comment.content}</p> 
-                        <p>{new Date(comment.createdAt).toLocaleString()}</p> <button onClick={() => deleteComment(comment.id)}>Delete</button>
-                        <p>{comment.author}</p>
+                        <p>{comment.content}</p>
+                        <p>{comment.author}</p> 
+                        <p>{new Date(comment.createdAt).toLocaleString()}</p> <button onClick={() => deleteCom(comment.id)}>Delete</button>
+                        
 
                         
                     </div>
