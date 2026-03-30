@@ -64,6 +64,20 @@ const update = () => {
     });
 }
 
+const deleteComment = (commentId) => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    }).then((res) => {
+        if (res.ok) {
+            setComments(comments.filter((comment) => comment.id !== commentId));
+        }
+    });
+};
+
+
     return (
         <div>
             <Navbar />
@@ -110,7 +124,7 @@ const update = () => {
                 {comments.map((comment) => (
                     <div key={comment.id} className="comment-item">
                         <p>{comment.content}</p> 
-                        <p>{new Date(comment.createdAt).toLocaleString()}</p>
+                        <p>{new Date(comment.createdAt).toLocaleString()}</p> <button onClick={() => deleteComment(comment.id)}>Delete</button>
                         <p>{comment.author}</p>
 
                         
