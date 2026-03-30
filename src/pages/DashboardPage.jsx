@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar'
 import { getProjects } from '../services/ProjectService';
 import { getAllIssues } from '../services/IssueService';
 import "./DashboardPage.css";
-
+import { Link } from 'react-router-dom';
 
 function DashboardPage() {
 
@@ -37,11 +37,16 @@ function DashboardPage() {
     <p>Welcome back, {decoded.sub}!</p>
     <div className="stats-grid">
         <div className="stat-card">
+            <Link to="/projects" >
             <h3>Total Projects</h3>
+            </Link>
             <span>{projects.length}</span>
+            
         </div>
         <div className="stat-card">
+            <Link to="/projects">
             <h3>Total Issues</h3>
+            </Link>
             <span>{issues.length}</span>
         </div>
         <div className="stat-card todo">

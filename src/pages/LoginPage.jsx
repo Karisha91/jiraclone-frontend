@@ -54,7 +54,7 @@ function LoginPage() {
         />
         <button type="submit">Login</button>
       </form>
-      <Link to = "/register">Dont have accaunt ? Register</Link>
+      <Link to = "/register">Dont have account ? Register</Link>
       </div>
     </div>
   );
