@@ -54,3 +54,34 @@
     font-size: 14px;
     box-sizing: border-box;
 }
+.comment-item {
+    background-color: #0f3460;
+    border-radius: 6px;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comment-content {
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.comment-author {
+    color: #e94560;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.comment-date {
+    color: #a0a0a0;
+    font-size: 11px;
+}
+
+.comment-delete-btn {
+    width: auto !important;
+    padding: 4px 10px !important;
+    font-size: 11px !important;
+    align-self: flex-end;
+}
