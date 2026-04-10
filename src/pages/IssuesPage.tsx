@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./IssuesPage.css";
-import { deleteIssue, getIssuesByProjectId, createIssue } from "../services/IssueService";
+import { deleteIssue, getIssuesByProjectId, createIssue, Issue, Status, Priority } from "../services/IssueService";
 
 function IssuesPage() {
-  const [issues, setIssues] = useState([]);
+  const [issues, setIssues] = useState<Issue[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("TO_DO");
@@ -17,36 +17,35 @@ function IssuesPage() {
   const [filterPriority, setFilterPriority] = useState("ALL");
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
 
   const filteredIssues = filter === "ALL" ? issues : issues.filter((issue) => issue.status === filter); 
   const filteredIssuesByPriority = filterPriority === "ALL" ? filteredIssues : filteredIssues.filter((issue) => issue.priority === filterPriority);
   
 
-  const handleDeleteIssue = (issueId) => {
-    deleteIssue(issueId).then(() => {
+  const handleDeleteIssue = async (issueId: number) => {
+    await deleteIssue(issueId).then(() => {
       setIssues(issues.filter((issue) => issue.id !== issueId));
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    createIssue(title, description, status, priority, id)
-      .then((response) => response.json())
-      .then((data) => {
-        setIssues([...issues, data]);
-        setTitle("");
-        setDescription("");
-        setFilter("ALL");
-        setFilterPriority("ALL");
-      });
+    if (!id) return;
+    const response = await createIssue(title, description, status as Status, priority as Priority, Number(id));
+    const newIssue = await response.json();
+       
+    setIssues([...issues, newIssue]);
+    setTitle("");
+    setDescription("");
+    setFilter("ALL");
+    setFilterPriority("ALL");
   };
 
   useEffect(() => {
     setLoading(true);
-      getIssuesByProjectId(id)
-      .then((response) => response.json())
+      getIssuesByProjectId(Number(id))
       .then((data) => {
         setIssues(data);
         setLoading(false);

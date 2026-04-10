@@ -2,34 +2,34 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./Projects.css";
-import { deleteProject, createProject, getProjects } from "../services/ProjectService";
+import { deleteProject, createProject, getProjects, Project } from "../services/ProjectService";
 
 function ProjectsPage() {
 
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
 
-    const handleDelete =(id) => deleteProject(id).then(() => {
+    const handleDelete = async (id: number) => 
+      await deleteProject(id).then(() => {
       setProjects(projects.filter((project) => project.id !== id));
     });
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createProject(projectName, description)
-      .then((response) => response.json())
-      .then((data) => {
-        setProjects([...projects, data]);
-      });
+    if (!projectName || !description) return;
+    const response = await createProject(projectName, description);
+    const data = await response.json();
+       setProjects([...projects, data]);
+      
   };
 
 
   useEffect(() => {
     setLoading(true);
     getProjects()
-      .then((response) => response.json())
       .then((data) => {
         setProjects(data);
         setLoading(false);

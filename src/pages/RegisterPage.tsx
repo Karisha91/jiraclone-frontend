@@ -13,21 +13,21 @@ const [email, setEmail] = useState("");
 const [role, setRole] = useState("USER");
 const [error, setError] = useState("");
 
-const handleRegister = (e) => {
+const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, email, role }),
-    }).then((res) => {
-        if (res.ok) {
+    });
+        if (response.ok) {
             navigate("/login");
         } else {
            setError("Registration failed. Please check your details and try again.");
         }
-    });
+    ;
 };
 
 
@@ -39,10 +39,10 @@ const handleRegister = (e) => {
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleRegister}>
                     
-                <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <input type="text" placeholder="Username" value={username} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
+                <input type="password" placeholder="Password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} />
+                <input type="email" placeholder="Email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} />
+                <select value={role} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setRole(e.target.value)}>
                     <option value="USER">User</option>
                     <option value="ADMIN">Admin</option>
                     <option value="DEVELOPER">Developer</option>

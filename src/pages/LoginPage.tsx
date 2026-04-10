@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./LoginPage.css";
 
+
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -10,27 +11,24 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+   const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
-    })
-    .then((res) => {
-        if (res.ok) {
-            res.json().then((data) => {
+    });
+        if (response.ok) {
+            const data = await response.json();
                 localStorage.setItem("token", data.token);
                 navigate("/dashboard");
-            });
         } else {
             setError("Invalid username or password");
         }
-    });
-};
+  };
 
   return (
     <div className="login-container">
@@ -44,13 +42,13 @@ function LoginPage() {
           type="text"
           placeholder="Username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
       </form>

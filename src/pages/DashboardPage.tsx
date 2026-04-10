@@ -1,29 +1,27 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar'
-import { getProjects } from '../services/ProjectService';
-import { getAllIssues } from '../services/IssueService';
+import { getProjects, Project } from '../services/ProjectService';
+import { getAllIssues, Issue } from '../services/IssueService';
 import "./DashboardPage.css";
 import { Link } from 'react-router-dom';
 
 function DashboardPage() {
 
-    const [issues, setIssues] = useState([]);
-    const [projects, setProjects] = useState([]);
+    const [issues, setIssues] = useState<Issue[]>([]);
+    const [projects, setProjects] = useState<Project[]>([]);
 
     const token = localStorage.getItem('token')
-    const payload = token.split('.')[1]
-    const decoded = JSON.parse(atob(payload))
+    const payload = token ? token.split('.')[1] : ''
+    const decoded = payload ? JSON.parse(atob(payload)) : { sub: 'User' }
 
 
     useEffect(() => {
         getProjects()
-        .then(response => response.json())
         .then(data => setProjects(data))
     }, [])
     useEffect(() => {
         getAllIssues()
-        .then(response => response.json())
         .then(data => setIssues(data))
     }, [])
 

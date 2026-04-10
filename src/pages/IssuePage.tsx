@@ -1,57 +1,58 @@
-import { use, useEffect, useState } from "react";
-import { data, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import {
   getCommentsByIssueId,
   getIssueById,
   updateIssue,
   deleteComment,
+  Issue,
+  Comment,
+  Status,
+  Priority,
 } from "../services/IssueService";
 import "./IssuePage.css";
 import { useNavigate } from "react-router-dom";
 
 function IssuePage() {
-  const [issue, setIssue] = useState(null);
-  const navigate = useNavigate();
+  const [issue, setIssue] = useState<Issue | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
-  const { id } = useParams();
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [createComment, setCreateComment] = useState("");
 
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    getIssueById(id)
-      .then((response) => response.json())
+    getIssueById(Number(id))
       .then((data) => setIssue(data));
   }, []);
 
   useEffect(() => {
-    getCommentsByIssueId(id)
-      .then((response) => response.json())
+    getCommentsByIssueId(Number(id))
+      
       .then((data) => setComments(data));
   }, [id]);
 
-  const addComment = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
+  const addComment = async () => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ content: createComment, issue: { id: issue.id } }),
-    }).then((res) => {
-      if (res.ok) {
-        res.json().then((data) => {
-          console.log(data);
-
-          setComments([...comments, data]);
-          setCreateComment("");
-        });
-      }
+      body: JSON.stringify({ content: createComment, issue: { id: issue?.id } }),
     });
+    if (response.ok) {
+      const data = await response.json();
+      setComments([...comments, data]);
+      setCreateComment("");
+    }
   };
 
-  const update = () => {
+  const update = async () => {
+    if (!issue) return;
     updateIssue(
       issue.title,
       issue.description,
@@ -68,13 +69,11 @@ function IssuePage() {
     });
   };
 
-  const deleteCom = (commentId) => {
-    deleteComment(commentId).then((res) => {
-      if (res.ok) {
-        setComments(comments.filter((comment) => comment.id !== commentId));
-      }
-    });
+  const deleteCom = async (commentId: number) => {
+    await deleteComment(commentId);
+    setComments(comments.filter((comment) => comment.id !== commentId));
   };
+  
 
   return (
     <div>
@@ -102,18 +101,18 @@ function IssuePage() {
             <div>
               <input
                 type="text"
-                value={issue.title}
-                onChange={(e) => setIssue({ ...issue, title: e.target.value })}
+                value={issue?.title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIssue({ ...issue!, title: e.target.value })}
               />
               <textarea
-                value={issue.description}
+                value={issue?.description}
                 onChange={(e) =>
-                  setIssue({ ...issue, description: e.target.value })
+                  setIssue({ ...issue!, description: e.target.value })
                 }
               />
               <select
-                value={issue.status}
-                onChange={(e) => setIssue({ ...issue, status: e.target.value })}
+                value={issue?.status}
+                onChange={(e) => setIssue({ ...issue!, status: e.target.value as Status })}
               >
                 <option value="TO_DO">To Do</option>
                 <option value="IN_PROGRESS">In Progress</option>
@@ -121,9 +120,9 @@ function IssuePage() {
                 <option value="DONE">Done</option>
               </select>
               <select
-                value={issue.priority}
+                value={issue?.priority}
                 onChange={(e) =>
-                  setIssue({ ...issue, priority: e.target.value })
+                  setIssue({ ...issue!, priority: e.target.value as Priority })
                 }
               >
                 <option value="LOW">Low</option>
@@ -140,7 +139,7 @@ function IssuePage() {
                 <p className="comment-author">{comment.author}</p>
                 <p className="comment-content">{comment.content}</p>
                 <p className="comment-date">
-                  {new Date(comment.createdAt).toLocaleString()}
+                  {new Date(comment.createdAt).toLocaleString('sr-RS', { timeZone: 'Europe/Belgrade' })}
                 </p>
                 <button
                   className="comment-delete-btn"
@@ -157,7 +156,7 @@ function IssuePage() {
             value={createComment}
             onChange={(e) => setCreateComment(e.target.value)}
           />
-          <button placeholder="Enter comment..." onClick={addComment}>
+          <button onClick={addComment}>
             Add comment
           </button>
         </div>
