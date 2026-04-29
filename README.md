@@ -3,7 +3,9 @@ A full-stack project management application inspired by Jira, built from scratch
 🔗 Live Demo: jiraclone-frontend.vercel.app
 
 Testing credentials:
+
 username: testuser
+
 password: password123
 
 Screenshots
@@ -46,50 +48,80 @@ Mockito
 Features
 
 JWT Authentication (Login / Register)
+
 Protected Routes
+
 Projects — Create, view, delete
+
 Issues — Create, view, edit, delete with status and priority badges
+
 Filter issues by status and priority
+
 Comments — Add and delete comments on issues
+
 Dashboard with live stats (total projects, issues by status)
+
 Fully deployed and production ready
 
 
 Repositories
 
 Frontend: github.com/Karisha91/jiraclone-frontend
+
 Backend: github.com/Karisha91/jiraclone
 
 
 Running Locally with Docker 🐳
+
 The easiest way to run the backend locally is with Docker. No need to install Java, Maven or PostgreSQL.
+
 Prerequisites: Docker Desktop installed and running.
+
 bashgit clone https://github.com/Karisha91/jiraclone
+
 cd jiraclone
+
 docker-compose up --build
+
 Backend will be available at http://localhost:8080.
+
+
 Frontend
+
 bashgit clone https://github.com/Karisha91/jiraclone-frontend
+
 cd jiraclone-frontend
+
 npm install
+
 # Create .env file with VITE_API_URL=http://localhost:8080
+
 npm run dev
 
+
 Running Locally without Docker
+
 bashgit clone https://github.com/Karisha91/jiraclone
+
 cd jiraclone
+
 # Set up PostgreSQL and update application.properties
+
 ./mvnw spring-boot:run
 
 Architecture
 
 Backend — Dockerized Spring Boot app deployed on Render
+
 Database — Neon PostgreSQL (production) / Docker container (local)
+
 Frontend — React + TypeScript deployed on Vercel
 
 
 Author
+
 Ivan — Career changer from retail management to full-stack development.
+
 Self-taught, 9 months of coding experience.
 
 GitHub: github.com/Karisha91
