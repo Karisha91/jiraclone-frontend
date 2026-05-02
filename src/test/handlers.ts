@@ -2,8 +2,8 @@ import { http, HttpResponse } from 'msw'
 
 
 const fakeProjects = [
-    {id: 1, name: "FakeProject1", description: "FakeDesc" },
-    {id: 2, name: "FakeProject2", description: "FakeDesc2" }   
+    {id: 1, projectName: "FakeProject1", description: "FakeDesc" },
+    {id: 2, projectName: "FakeProject2", description: "FakeDesc2" }   
 ]
 const fakeIssues = [
     {id: 1,title:"FakeTitle", description: "fakeDesc", status: "IN_REVIEW", priority: "LOW"},
@@ -32,5 +32,17 @@ export const handlers = [
     }),
     http.get(`*/api/issues`, () => {
         return HttpResponse.json(fakeIssues)
+    }),
+    http.delete(`*/api/projects/:id`, ({ params }) => {
+        const { id } = params
+        return HttpResponse.json(
+            {message: `Project ${id} deleted`},
+            {status: 200}
+            ) 
+        
+    }),
+    http.post(`*/api/projects`, async ({request }) => {
+        const body = await request.json() as {name: string, description: string}
+        return HttpResponse.json({ id: 3, projectName: body.name, description: body.description })
     })
 ]
