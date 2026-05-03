@@ -43,4 +43,5 @@ describe('RegisterPage', () => {
         await user.click(screen.getByRole('button', {name: /register/i}))
         expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
     })
+    
 })

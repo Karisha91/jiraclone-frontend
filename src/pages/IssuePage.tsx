@@ -154,6 +154,7 @@ function IssuePage() {
           <input
             type="text"
             value={createComment}
+            placeholder="Add comment..."
             onChange={(e) => setCreateComment(e.target.value)}
           />
           <button onClick={addComment}>
