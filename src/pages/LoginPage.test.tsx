@@ -35,7 +35,7 @@ const user = userEvent.setup()
     await user.type(screen.getByPlaceholderText(/username/i), 'user')
     await user.type(screen.getByPlaceholderText(/password/i), 'password')
     await user.click(screen.getByRole('button', {name: /login/i}))
-    expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
   })
   test('should redirect to Register page', async () => {
     render(<App />)
