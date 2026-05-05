@@ -15,7 +15,7 @@ describe('IssuesPage', () => {
                 </Routes>
             </MemoryRouter>
         )
-        expect(screen.getByRole('heading', { name: /Issues Page/i })).toBeInTheDocument()
+        expect(screen.getByRole('heading', {name: /wrong text/i})).toBeInTheDocument()
     })
 
     test('should show loading state initially', async () => {
