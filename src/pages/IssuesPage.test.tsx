@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import IssuesPage from './IssuesPage'
 import { server } from '../test/server'
 import { http, HttpResponse } from 'msw'
-//test
+
 describe('IssuesPage', () => {
     test('should render issues page', () => {
         render(
