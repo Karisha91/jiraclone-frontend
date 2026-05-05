@@ -80,7 +80,23 @@ export const handlers = [
     }),
     http.put(`*/api/issues/:id`, async  ({ params, request }) => {
          const { id } = params
-         const body = await request.json() as {title: String, description: String, status: Status, priority: Priority, projectName: String, reporterUsername: String, assigneeUsername: String, projectId: number}
-         return HttpResponse.json({id: 5, title: body.title, description: body.description, status: body.status, priority: body.priority, projectName: body.projectName, reporterUsername: body.reporterUsername, assigneeUsername: body.assigneeUsername, projectId: body.projectId})
-    })
+         const body = await request.json() as {title: String, description: String, status: Status, priority: Priority}
+         return HttpResponse.json({id: 5, title: body.title, description: body.description, status: body.status, priority: body.priority})
+    }),
+    http.get(`*/api/issues/project/:id`, ({ params }) => {
+        const { id } = params
+        return HttpResponse.json(fakeIssues)
+
+    }),
+    http.post('*/api/issues', async ({ request }) => {
+    const body = await request.json() as { title: string, description: string, status: Status, priority: Priority }
+    return HttpResponse.json({ id: 5, title: body.title, description: body.description, status: body.status, priority: body.priority, projectId: 1 })
+}),
+http.delete('*/api/issues/:id', ({ params }) => {
+    const { id } = params
+    return HttpResponse.json(
+        { message: `Issue ${id} deleted` },
+        { status: 200 }
+    )
+})
 ]
