@@ -7,7 +7,7 @@ Testing credentials:
 username: testuser
 
 password: password123
-
+COWORKER WORK FOR 05.05.2026 cya
 Screenshots
 # Updated by coworker test
 <img width="1106" height="575" alt="image" src="https://github.com/user-attachments/assets/430a2d17-cca5-485a-934b-6f728d835dca" />
