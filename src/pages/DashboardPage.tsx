@@ -31,7 +31,7 @@ function DashboardPage() {
     return (
         <div className="dashboard-container">
     <Navbar />
-    <h1>Dashboard</h1>
+    <h1>test test broken </h1>
     <p>Welcome back, {decoded.sub}!</p>
     <div className="stats-grid">
         <div className="stat-card">
