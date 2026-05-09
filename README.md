@@ -1,132 +1,149 @@
-Jira Clone
-A full-stack project management application inspired by Jira, built from scratch with Spring Boot and React + TypeScript.
-🔗 Live Demo: jiraclone-frontend.vercel.app
+# Jira Clone
 
+A full-stack project management application inspired by Jira, built end-to-end from scratch.
+
+![Java](https://img.shields.io/badge/Java_21-ED8B00?style=flat&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring&logoColor=white)
+![React](https://img.shields.io/badge/React_18-20232A?style=flat&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)
+
+🔗 **Live Demo:** [jiraclone-frontend.vercel.app](https://jiraclone-frontend.vercel.app)
+
+```
 Testing credentials:
-
 username: testuser
-
 password: password123
+```
 
-Screenshots
-# Updated by coworker test
-<img width="1106" height="575" alt="image" src="https://github.com/user-attachments/assets/430a2d17-cca5-485a-934b-6f728d835dca" />
+---
 
-<img width="606" height="573" alt="image" src="https://github.com/user-attachments/assets/e5d4c6d7-edc0-4c71-979c-c476c2a80923" />
+## Screenshots
 
-<img width="708" height="915" alt="image" src="https://github.com/user-attachments/assets/
-303fd41b-de7c-40ba-9e93-9da369322fb2" />
+<img width="1106" alt="Dashboard" src="https://github.com/user-attachments/assets/430a2d17-cca5-485a-934b-6f728d835dca" />
+<img width="606" alt="Projects" src="https://github.com/user-attachments/assets/e5d4c6d7-edc0-4c71-979c-c476c2a80923" />
+<img width="708" alt="Issues" src="https://github.com/user-attachments/assets/303fd41b-de7c-40ba-9e93-9da369322fb2" />
+<img width="603" alt="Issue Detail" src="https://github.com/user-attachments/assets/8c070809-6cc7-4424-a508-2247c65a36ad" />
 
-<img width="603" height="887" alt="image" src="https://github.com/user-attachments/assets/8c070809-6cc7-4424-a508-2247c65a36ad" />
+---
 
-Tech Stack
-Backend
+## Tech Stack
 
-Java 21
-Spring Boot 3.5
-Spring Security + JWT Authentication
-PostgreSQL
-Hibernate / JPA
-Docker (containerized with multi-stage Dockerfile)
-Render (deployment)
+### Backend
+- Java 21
+- Spring Boot 3.5
+- Spring Security + JWT Authentication
+- PostgreSQL / JPA / Hibernate
+- Docker (multi-stage Dockerfile + docker-compose)
+- Railway (deployment)
 
-Frontend
+### Frontend
+- React 18 + TypeScript
+- Vite + React Router
+- CSS (custom dark theme)
+- Vercel (deployment)
 
-React 18 + TypeScript
-Vite
-React Router
-CSS (custom dark theme)
-Vercel (deployment)
+### Database
+- Neon PostgreSQL (production)
+- Docker PostgreSQL container (local development)
 
-Database
+---
 
-Neon PostgreSQL (production)
-Docker PostgreSQL container (local development)
+## Testing & CI/CD
 
-Testing
+### Tests — 62 passing across frontend and backend
 
-JUnit 5
-Mockito
-27 passing unit tests (AAA pattern)
+**Frontend (35 tests)** — React Testing Library + Vitest + MSW
+- LoginPage — render, error message, successful login redirect, register link
+- RegisterPage — render, error message, successful registration redirect
+- DashboardPage — render, welcome message, project/issue counts, status breakdowns
+- ProjectsPage — render, loading state, CRUD operations, empty state
+- IssuePage — render, issue details, comments CRUD, edit flow
+- IssuesPage — render, loading state, CRUD operations, status filtering
 
+**Backend (27 tests)** — JUnit 5 + Mockito (AAA pattern)
+- Service layer unit tests with mocked repositories
+- Full coverage of business logic across all services
 
-Features
+### CI/CD — GitHub Actions
+- Automated test runs on every Pull Request
+- Branch protection on both repos — direct pushes to main blocked
+- Tests must pass before merge is allowed
+- Railway auto-deploys backend on merge
+- Vercel auto-deploys frontend on merge
 
-JWT Authentication (Login / Register)
+---
 
-Protected Routes
+## Features
 
-Projects — Create, view, delete
+- **JWT Authentication** — Login / Register with bcrypt password hashing
+- **Protected Routes** — unauthorized users redirected to login
+- **Projects** — Create, view, delete projects
+- **Issues** — Create, view, edit, delete with status and priority badges
+- **Filtering** — Filter issues by status (To Do, In Progress, In Review, Done) and priority (Low, Medium, High, Critical)
+- **Comments** — Add and delete comments on issues
+- **Dashboard** — Live stats: total projects, total issues, breakdown by status
+- **Fully deployed** — both frontend and backend live and production ready
 
-Issues — Create, view, edit, delete with status and priority badges
+---
 
-Filter issues by status and priority
+## Architecture
 
-Comments — Add and delete comments on issues
+```
+Frontend (React + TypeScript)  →  Vercel
+Backend (Spring Boot)          →  Railway (Dockerized)
+Database                       →  Neon PostgreSQL (production)
+                               →  Docker container (local dev)
+```
 
-Dashboard with live stats (total projects, issues by status)
+---
 
-Fully deployed and production ready
+## Running Locally with Docker 🐳
 
+The easiest way to run the full app locally. No need to install Java, Maven, or PostgreSQL separately.
 
-Repositories
+**Prerequisites:** Docker Desktop installed and running.
 
-Frontend: github.com/Karisha91/jiraclone-frontend
-
-Backend: github.com/Karisha91/jiraclone
-
-
-Running Locally with Docker 🐳
-
-The easiest way to run the backend locally is with Docker. No need to install Java, Maven or PostgreSQL.
-
-Prerequisites: Docker Desktop installed and running.
-
-bashgit clone https://github.com/Karisha91/jiraclone
-
+```bash
+git clone https://github.com/Karisha91/jiraclone
 cd jiraclone
-
 docker-compose up --build
+```
 
-Backend will be available at http://localhost:8080.
+Backend will be available at `http://localhost:8080`.
 
-
-Frontend
-
-bashgit clone https://github.com/Karisha91/jiraclone-frontend
-
+```bash
+git clone https://github.com/Karisha91/jiraclone-frontend
 cd jiraclone-frontend
-
 npm install
-
-# Create .env file with VITE_API_URL=http://localhost:8080
-
+# Create .env file: VITE_API_URL=http://localhost:8080
 npm run dev
+```
 
+---
 
-Running Locally without Docker
+## Running Locally without Docker
 
-bashgit clone https://github.com/Karisha91/jiraclone
-
+```bash
+git clone https://github.com/Karisha91/jiraclone
 cd jiraclone
-
 # Set up PostgreSQL and update application.properties
-
 ./mvnw spring-boot:run
+```
 
-Architecture
+---
 
-Backend — Dockerized Spring Boot app deployed on Render
+## Repositories
 
-Database — Neon PostgreSQL (production) / Docker container (local)
+- Frontend: [github.com/Karisha91/jiraclone-frontend](https://github.com/Karisha91/jiraclone-frontend)
+- Backend: [github.com/Karisha91/jiraclone](https://github.com/Karisha91/jiraclone)
 
-Frontend — React + TypeScript deployed on Vercel
+---
 
+## Author
 
-Author
+**Ivan Djurdjevic** — Career changer from 14 years of retail management to full-stack development. Self-taught, 9 months of coding experience.
 
-Ivan — Career changer from retail management to full-stack development.
-
-Self-taught, 9 months of coding experience.
-
-GitHub: github.com/Karisha91
+[GitHub](https://github.com/Karisha91) 
