@@ -8,10 +8,20 @@ import IssuesPage from "./pages/IssuesPage";
 import RegisterPage from "./pages/RegisterPage";
 import IssuePage from "./pages/IssuePage";
 import { Navigate } from "react-router-dom";
+import { useNotifications } from "./hooks/useNotifications";
+import { NotificationContext } from "./context/NotificationContext";
 
 
 function App() {
+
+  const token = localStorage.getItem('token');
+  const payload = token ? token.split('.')[1] : '';
+  const decoded = payload ? JSON.parse(atob(payload)) : null;
+  const userId = decoded?.userId ?? null;
+
+  const { notifications } = useNotifications(userId);
   return (
+    <NotificationContext.Provider value={{ notifications }}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
@@ -53,6 +63,7 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
+    </NotificationContext.Provider>
   );
 }
 
