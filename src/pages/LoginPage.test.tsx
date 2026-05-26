@@ -40,7 +40,7 @@ const user = userEvent.setup()
   test('should redirect to Register page', async () => {
     render(<App />)
     const user = userEvent.setup()
-    await user.click(await screen.findByRole('link', {name: /Dont have/i}))
+    await user.click(await screen.findByRole('link', {name: /Don't have an account/i}))
     expect(screen.getByRole('heading', { name: /register/i })).toBeInTheDocument()
   })
 })
