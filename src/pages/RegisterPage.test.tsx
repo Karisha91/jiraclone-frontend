@@ -41,7 +41,7 @@ describe('RegisterPage', () => {
         await user.type(screen.getByPlaceholderText(/email/i), '123@gmail.com')
         await user.selectOptions(screen.getByRole('combobox'), 'USER')
         await user.click(screen.getByRole('button', {name: /register/i}))
-        expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument()
+        expect(await screen.findByRole('heading', { name: /welcome back/i })).toBeInTheDocument()
     })
     
 })
