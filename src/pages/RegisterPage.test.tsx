@@ -35,13 +35,14 @@ describe('RegisterPage', () => {
         )
         render(<App />)
         const user = userEvent.setup()
-        await user.click(await screen.findByRole('link', {name: /Dont have/i}))
+        await user.click(await screen.findByRole('link', {name: /Don't have an account/i}))
         await user.type(screen.getByPlaceholderText(/username/i), 'test123')
         await user.type(screen.getByPlaceholderText(/password/i), '123')
         await user.type(screen.getByPlaceholderText(/email/i), '123@gmail.com')
         await user.selectOptions(screen.getByRole('combobox'), 'USER')
         await user.click(screen.getByRole('button', {name: /register/i}))
-        expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
+        expect(await screen.findByRole('heading', { name: /welcome back/i })).toBeInTheDocument()
+        //asd
     })
     
 })

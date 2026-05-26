@@ -35,24 +35,29 @@ function LoginPage() {
       <div className="login-card">
       
       
-      <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <h1>Welcome back</h1>
+      <p className="login-subtitle">Sign in to your account</p>
+      {error && <p className="login-error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
-      <Link to = "/register">Dont have account ? Register</Link>
+  <div className="login-field">
+    <input
+      type="text"
+      placeholder="Username"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+    />
+  </div>
+  <div className="login-field">
+    <input
+      type="password"
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+  </div>
+  <button type="submit">Login</button>
+</form>
+      <Link to="/register">Don't have an account? <span>Register</span></Link>
       </div>
     </div>
   );
