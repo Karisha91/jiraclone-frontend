@@ -42,6 +42,7 @@ describe('RegisterPage', () => {
         await user.selectOptions(screen.getByRole('combobox'), 'USER')
         await user.click(screen.getByRole('button', {name: /register/i}))
         expect(await screen.findByRole('heading', { name: /welcome back/i })).toBeInTheDocument()
+        //asd
     })
     
 })
