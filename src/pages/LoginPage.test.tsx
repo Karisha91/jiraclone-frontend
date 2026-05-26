@@ -41,7 +41,7 @@ const user = userEvent.setup()
     render(<App />)
     const user = userEvent.setup()
     await user.click(await screen.findByRole('link', {name: /Don't have an account/i}))
-    expect(screen.getByRole('heading', { name: /register/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /create account/i })).toBeInTheDocument()
   })
 })
 
