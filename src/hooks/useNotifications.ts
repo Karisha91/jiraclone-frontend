@@ -4,7 +4,7 @@ import SockJS from "sockjs-client";
 
 export interface Notification {
   message: string;
-  taskId: number;
+  issueId: number;
 }
 
 export function useNotifications(userId: number | null) {
@@ -18,10 +18,7 @@ export function useNotifications(userId: number | null) {
       onConnect: () => {
         
         client.subscribe(`/queue/notifications/${userId}`, (message) => {
-          const notification: Notification = {
-          message: message.body,
-          taskId: 0
-        };
+          const notification: Notification = JSON.parse(message.body);
           setNotifications((prev) => [...prev, notification]);
         });
       },

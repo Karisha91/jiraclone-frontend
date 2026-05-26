@@ -2,11 +2,27 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useNotificationContext } from "../context/NotificationContext";
+import { useState, useRef, useEffect } from "react";
 
 function Navbar() {
   const { notifications } = useNotificationContext();
-
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+  function handleClickOutside(event) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -20,10 +36,27 @@ function Navbar() {
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/projects">Projects</Link>
       </div>
-      <div className="navbar-bell">
-        🔔{" "}
+      <div className="navbar-bell" ref={dropdownRef} onClick={() => setIsOpen(!isOpen)}>
+        Notifications
         {notifications.length > 0 && (
           <span className="navbar-badge">{notifications.length}</span>
+        )}
+        {isOpen && (
+          <div className="navbar-dropdown">
+            {notifications.length === 0 ? (
+              <p className="navbar-dropdown-empty">No notifications</p>
+            ) : (
+              notifications.map((notification, index) => (
+                <div
+                  key={index}
+                  className="navbar-dropdown-item"
+                  onClick={() => navigate(`/issues/${notification.issueId}`)}
+                >
+                  {notification.message}
+                </div>
+              ))
+            )}
+          </div>
         )}
       </div>
       <button className="navbar-logout" onClick={handleLogout}>
