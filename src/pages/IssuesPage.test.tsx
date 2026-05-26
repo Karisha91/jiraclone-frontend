@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import IssuesPage from './IssuesPage'
 import { server } from '../test/server'
 import { http, HttpResponse } from 'msw'
-// test test this is my work for today. cya tmrow
+
 describe('IssuesPage', () => {
     test('should render issues page', () => {
         render(
@@ -15,7 +15,7 @@ describe('IssuesPage', () => {
                 </Routes>
             </MemoryRouter>
         )
-        expect(screen.getByRole('heading', { name: /Issues Page/i })).toBeInTheDocument()
+        expect(screen.getByRole('heading', { name: /Issues/i })).toBeInTheDocument()
     })
 
     test('should show loading state initially', async () => {
@@ -53,7 +53,7 @@ describe('IssuesPage', () => {
                 </Routes>
             </MemoryRouter>
         )
-        expect(await screen.findByText('No issues found for this project. Please add a new issue.')).toBeInTheDocument()
+        expect(await screen.findByText('No issues found. Add one below.')).toBeInTheDocument()
     }),
     test('should filter issues by status',async () => {
         render(
@@ -95,7 +95,6 @@ describe('IssuesPage', () => {
         const user = userEvent.setup()
         await screen.findByText('FakeTitle')
         await user.click(screen.getAllByRole('button', {name: /delete/i})[0])
-
         expect(screen.queryByText('FakeTitle')).not.toBeInTheDocument()
     })
 })
