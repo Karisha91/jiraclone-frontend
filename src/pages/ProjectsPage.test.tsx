@@ -28,14 +28,14 @@ test('should show empty state when no projects',async () => {
             })
     )
     render(<MemoryRouter><ProjectsPage/></MemoryRouter>)
-    expect(await screen.findByText('No projects found. Please add a new project.')).toBeInTheDocument()
+    expect(await screen.findByText('No projects found. Add one below.')).toBeInTheDocument()
 }),
 
 test('should add new project', async () => {
 render(<MemoryRouter><ProjectsPage /></MemoryRouter>)
 const user = userEvent.setup()
-await user.type(screen.getByPlaceholderText(/Project Name/i), 'test123')
-await user.type(screen.getByPlaceholderText(/Description/i), 'test123')
+await user.type(screen.getByPlaceholderText(/project name/i), 'test123')
+await user.type(screen.getByPlaceholderText(/description/i), 'test123')
 await user.click(screen.getByRole('button', {name: /Add project/i}))
 expect(await screen.findByText('test123')).toBeInTheDocument()
 }),

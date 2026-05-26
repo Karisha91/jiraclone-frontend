@@ -41,20 +41,33 @@ function ProjectsPage() {
   <div>
     <Navbar />
     <div className="projects-container">
-      <div className="projects-card">
+      <div className="projects-header">
         <h1>Projects</h1>
-        {loading && <p>Loading projects...</p>}
-        {!loading && projects.length === 0 && <p>No projects found. Please add a new project.</p>}
+        <p>Manage your projects</p>
+      </div>
+
+      {loading && <p className="projects-empty">Loading projects...</p>}
+      {!loading && projects.length === 0 && (
+        <p className="projects-empty">No projects found. Add one below.</p>
+      )}
+
+      <div className="projects-grid">
         {projects.map((project) => (
-          <div key={project.id} className="project-item">
+          <div key={project.id} className="project-card">
             <Link to={`/projects/${project.id}/issues`}>
               {project.projectName}
             </Link>
-            <button className="delete-btn" onClick={() => handleDelete(project.id)}>Delete</button>
+            <button className="delete-btn" onClick={() => handleDelete(project.id)}>
+              Delete
+            </button>
           </div>
         ))}
+      </div>
+
+      <div className="add-project-form">
+        <h3>New Project</h3>
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+          <input type="text" placeholder="Project name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
           <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
           <button type="submit">Add Project</button>
         </form>
