@@ -14,18 +14,24 @@ A full-stack project management application inspired by Jira, built end-to-end f
 
 ```
 Testing credentials:
-username: testuser
-password: password123
+username: test
+password: test
 ```
 
 ---
 
 ## Screenshots
 
-<img width="1106" alt="Dashboard" src="https://github.com/user-attachments/assets/430a2d17-cca5-485a-934b-6f728d835dca" />
-<img width="606" alt="Projects" src="https://github.com/user-attachments/assets/e5d4c6d7-edc0-4c71-979c-c476c2a80923" />
-<img width="708" alt="Issues" src="https://github.com/user-attachments/assets/303fd41b-de7c-40ba-9e93-9da369322fb2" />
-<img width="603" alt="Issue Detail" src="https://github.com/user-attachments/assets/8c070809-6cc7-4424-a508-2247c65a36ad" />
+
+<img width="1536" height="864" alt="1" src="https://github.com/user-attachments/assets/e622826a-0808-4160-ab4d-ac0ea74facd1" />
+<img width="1536" height="864" alt="2" src="https://github.com/user-attachments/assets/c300e2bb-6d24-4b00-bb5c-180d0d2e209d" />
+<img width="1536" height="1033" alt="3" src="https://github.com/user-attachments/assets/d3009e09-291c-42ae-9fd2-80982baf26bf" />
+<img width="1536" height="875" alt="4" src="https://github.com/user-attachments/assets/14ea7de4-8345-47d8-afde-058108a15832" />
+<img width="1536" height="864" alt="5" src="https://github.com/user-attachments/assets/698e4665-c73d-464c-abdc-46710b7ed3b5" />
+
+
+
+
 
 ---
 
@@ -38,12 +44,14 @@ password: password123
 - PostgreSQL / JPA / Hibernate
 - Docker (multi-stage Dockerfile + docker-compose)
 - Railway (deployment)
+- WebSockets (Spring WebSocket + STOMP message broker)
 
 ### Frontend
 - React 18 + TypeScript
 - Vite + React Router
 - CSS (custom dark theme)
 - Vercel (deployment)
+- WebSockets (STOMP over SockJS)
 
 ### Database
 - Neon PostgreSQL (production)
@@ -86,6 +94,7 @@ password: password123
 - **Comments** — Add and delete comments on issues
 - **Dashboard** — Live stats: total projects, total issues, breakdown by status
 - **Fully deployed** — both frontend and backend live and production ready
+- **Real-time Notifications** — WebSocket integration using STOMP over SockJS. Users receive instant in-app notifications when assigned to an issue. Notification bell shows unread count with a dropdown linking directly to the relevant issue.
 
 ---
 
@@ -144,6 +153,6 @@ cd jiraclone
 
 ## Author
 
-**Ivan Djurdjevic** — Career changer from 14 years of retail management to full-stack development. Self-taught, 9 months of coding experience.
+**Ivan Djurdjevic** — Career changer from 14 years of retail management to full-stack development. Self-taught, 10 months of coding experience.
 
 [GitHub](https://github.com/Karisha91) 
