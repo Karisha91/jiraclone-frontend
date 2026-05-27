@@ -2,7 +2,6 @@ import { render, screen, within} from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import IssuePage from './IssuePage'
-
 import userEvent from '@testing-library/user-event'
 
 describe('IssuePage', () => {
@@ -10,27 +9,27 @@ describe('IssuePage', () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
-        expect(screen.getByRole('heading', {name: /Issue Page/i})).toBeInTheDocument()
+        expect(screen.getByRole('heading', {name: /Issue Details/i})).toBeInTheDocument()
     }),
     test('should display issue details', async () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
         expect(await screen.findByText('TestDescription')).toBeInTheDocument();
     }),
-    test('should display comments',async  () => {
+    test('should display comments', async () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
@@ -41,20 +40,20 @@ describe('IssuePage', () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
         const user = userEvent.setup()
-        await user.type(screen.getByPlaceholderText(/Add comment/i), 'Test comment')
-        await user.click(screen.getByRole('button', {name: /Add comment/i}))
+        await user.type(screen.getByPlaceholderText(/Add a comment/i), 'Test comment')
+        await user.click(screen.getByRole('button', {name: /Post/i}))
         expect(screen.getByText('Test comment')).toBeInTheDocument()
     }),
     test('should delete comment', async () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
@@ -67,7 +66,7 @@ describe('IssuePage', () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
@@ -75,18 +74,16 @@ describe('IssuePage', () => {
         const user = userEvent.setup()
         await user.click(screen.getByRole('button', {name: /Edit issue/i}))
         expect(await screen.findByRole('button', {name: /Save Changes/i})).toBeInTheDocument();
-
-    })
-    ,
+    }),
     test('should update issue', async () => {
         render(
             <MemoryRouter initialEntries={['/issues/5']}>
                 <Routes>
-                    <Route path= "/issues/:id" element= {<IssuePage />}></Route>
+                    <Route path="/issues/:id" element={<IssuePage />}></Route>
                 </Routes>
             </MemoryRouter>
         )
-         expect(await screen.findByText('TestIssue'))
+        expect(await screen.findByText('TestIssue'))
         const user = userEvent.setup()
         await user.click(screen.getByRole('button', {name: /Edit issue/i}))
         await user.clear(screen.getAllByRole('textbox')[0])
