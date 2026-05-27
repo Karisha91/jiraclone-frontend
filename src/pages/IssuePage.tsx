@@ -76,94 +76,93 @@ function IssuePage() {
   
 
   return (
-    <div>
-      <Navbar />
-      <div className="issue-container">
-        <div className="issue-card">
-          <h1>Issue Page</h1>
-          {error && <p style={{ color: "green" }}>{error}</p>}
+  <div>
+    <Navbar />
+    <div className="issue-container">
+      <div className="issue-header">
+        <h1>Issue Details</h1>
+        {issue && (
+          <button className="back-btn" onClick={() => navigate(`/projects/${issue.projectId}/issues`)}>
+            ← Back to Issues
+          </button>
+        )}
+      </div>
 
-          {issue && (
-            <div>
-              <h2>{issue.title}</h2>
-              <p className="issue-detail">{issue.description}</p>
-              <p className="issue-status">Status: {issue.status}</p>
-              <p className="issue-status">Priority: {issue.priority}</p>
-              <button onClick={() => setIsEditing(true)}>Edit issue</button>
-              <button
-                onClick={() => navigate(`/projects/${issue.projectId}/issues`)}
-              >
-                Back to Issues
-              </button>
-            </div>
-          )}
-          {isEditing && (
-            <div>
-              <input
-                type="text"
-                value={issue?.title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIssue({ ...issue!, title: e.target.value })}
-              />
-              <textarea
-                value={issue?.description}
-                onChange={(e) =>
-                  setIssue({ ...issue!, description: e.target.value })
-                }
-              />
-              <select
-                value={issue?.status}
-                onChange={(e) => setIssue({ ...issue!, status: e.target.value as Status })}
-              >
-                <option value="TO_DO">To Do</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="IN_REVIEW">In Review</option>
-                <option value="DONE">Done</option>
-              </select>
-              <select
-                value={issue?.priority}
-                onChange={(e) =>
-                  setIssue({ ...issue!, priority: e.target.value as Priority })
-                }
-              >
-                <option value="LOW">Low</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="HIGH">High</option>
-                <option value="CRITICAL">Critical</option>
-              </select>
-              <button onClick={update}>Save Changes</button>
-            </div>
-          )}
-          <div>
-            {comments.map((comment) => (
-              <div key={comment.id} className="comment-item">
-                <p className="comment-author">{comment.author}</p>
-                <p className="comment-content">{comment.content}</p>
-                <p className="comment-date">
-                  {new Date(comment.createdAt).toLocaleString('sr-RS', { timeZone: 'Europe/Belgrade' })}
-                </p>
-                <button
-                  className="comment-delete-btn"
-                  onClick={() => deleteCom(comment.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
+      {error && <p className="success-msg">{error}</p>}
+
+      {issue && !isEditing && (
+        <div className="issue-details-card">
+          <h2>{issue.title}</h2>
+          <p className="issue-description">{issue.description}</p>
+          <div className="issue-badges">
+            <span className="issue-badge issue-badge-status">{issue.status}</span>
+            <span className="issue-badge issue-badge-priority">{issue.priority}</span>
           </div>
+          <div className="issue-actions">
+            <button className="edit-btn" onClick={() => setIsEditing(true)}>Edit Issue</button>
+          </div>
+        </div>
+      )}
 
+      {isEditing && (
+        <div className="edit-form-card">
+          <h3>Edit Issue</h3>
+          <input
+            type="text"
+            value={issue?.title}
+            onChange={(e) => setIssue({ ...issue!, title: e.target.value })}
+          />
+          <textarea
+            value={issue?.description}
+            onChange={(e) => setIssue({ ...issue!, description: e.target.value })}
+          />
+          <select
+            value={issue?.status}
+            onChange={(e) => setIssue({ ...issue!, status: e.target.value as Status })}
+          >
+            <option value="TO_DO">To Do</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="IN_REVIEW">In Review</option>
+            <option value="DONE">Done</option>
+          </select>
+          <select
+            value={issue?.priority}
+            onChange={(e) => setIssue({ ...issue!, priority: e.target.value as Priority })}
+          >
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+            <option value="CRITICAL">Critical</option>
+          </select>
+          <button className="save-btn" onClick={update}>Save Changes</button>
+        </div>
+      )}
+
+      <div className="comments-section">
+        <h3>Comments</h3>
+        {comments.map((comment) => (
+          <div key={comment.id} className="comment-item">
+            <p className="comment-author">{comment.author}</p>
+            <p className="comment-content">{comment.content}</p>
+            <p className="comment-date">
+              {new Date(comment.createdAt).toLocaleString('sr-RS', { timeZone: 'Europe/Belgrade' })}
+            </p>
+            <button className="comment-delete-btn" onClick={() => deleteCom(comment.id)}>Delete</button>
+          </div>
+        ))}
+        <div className="add-comment">
           <input
             type="text"
             value={createComment}
-            placeholder="Add comment..."
+            placeholder="Add a comment..."
             onChange={(e) => setCreateComment(e.target.value)}
           />
-          <button onClick={addComment}>
-            Add comment
-          </button>
+          <button onClick={addComment}>Post</button>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default IssuePage;
