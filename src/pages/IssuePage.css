@@ -1,106 +1,280 @@
 .issue-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #1a1a2e;
-}
-.issue-card {
-    background: #16213e;
+    min-height: calc(100vh - 60px);
+    background-color: #0f172a;
     padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    width: 350px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.issue-header {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
 }
-.issue-card h1 {
-    color: #e0e0e0;
-    text-align: center;
-    margin-bottom: 10px;
+
+.issue-header h1 {
+    color: #f1f5f9;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
 }
-.issue-card input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #0f3460;
-    background-color: #0f3460;
-    color: #e0e0e0;
-    font-size: 14px;
-    box-sizing: border-box;
+
+.back-btn {
+    background-color: transparent;
+    color: #94a3b8;
+    border: 1px solid #2e3d4f;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
-.issue-card button {
-    width: 100%;
-    padding: 10px;
+
+.back-btn:hover {
+    background-color: #1e293b;
+    color: #f1f5f9;
+}
+
+.issue-details-card {
+    background: #1e293b;
+    border: 1px solid #2e3d4f;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 24px;
+}
+
+.issue-details-card h2 {
+    color: #f1f5f9;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+}
+
+.issue-description {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0 0 20px 0;
+    line-height: 1.6;
+}
+
+.issue-badges {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.issue-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.issue-badge-status {
+    background-color: #1d4ed8;
+    color: white;
+}
+
+.issue-badge-priority {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+.issue-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn {
     background-color: #e94560;
     color: white;
     border: none;
-    border-radius: 6px;
-    font-size: 16px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
-.issue-card button:hover {
+
+.edit-btn:hover {
     background-color: #c73652;
 }
-.issue-card textarea {
+
+.edit-form-card {
+    background: #1e293b;
+    border: 1px solid #2e3d4f;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.edit-form-card h3 {
+    color: #f1f5f9;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.edit-form-card input,
+.edit-form-card textarea,
+.edit-form-card select {
     width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #0f3460;
-    background-color: #0f3460;
-    color: #e0e0e0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #2e3d4f;
+    background-color: #0f172a;
+    color: #f1f5f9;
     font-size: 14px;
     box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
 }
-.comment-item {
-    background-color: #0f3460;
+
+.edit-form-card input:focus,
+.edit-form-card textarea:focus,
+.edit-form-card select:focus {
+    border-color: #e94560;
+}
+
+.edit-form-card textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.save-btn {
+    background-color: #e94560;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #c73652;
+}
+
+.success-msg {
+    color: #4ade80;
+    font-size: 0.85rem;
+    background-color: rgba(74, 222, 128, 0.1);
+    padding: 8px 12px;
     border-radius: 6px;
-    padding: 10px 15px;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    margin: 0;
+}
+
+.comments-section {
+    background: #1e293b;
+    border: 1px solid #2e3d4f;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.comments-section h3 {
+    color: #f1f5f9;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+}
+
+.comment-item {
+    background-color: #0f172a;
+    border: 1px solid #2e3d4f;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.comment-content {
-    color: #e0e0e0;
-    font-size: 14px;
-}
-
 .comment-author {
     color: #e94560;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 600;
+    margin: 0;
+}
+
+.comment-content {
+    color: #e0e0e0;
+    font-size: 14px;
+    margin: 0;
 }
 
 .comment-date {
-    color: #a0a0a0;
+    color: #475569;
     font-size: 11px;
+    margin: 0;
 }
 
 .comment-delete-btn {
-    width: auto !important;
-    padding: 4px 10px !important;
-    font-size: 11px !important;
-    align-self: flex-end;
-}
-.issue-card h2 {
-    color: #e0e0e0;
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-
-.issue-detail {
-    color: #a0a0a0;
-    font-size: 13px;
-}
-
-.issue-status {
-    color: #e0e0e0;
-    font-size: 13px;
-    background-color: #0f3460;
+    background-color: transparent;
+    color: #64748b;
+    border: 1px solid #2e3d4f;
     padding: 4px 10px;
-    border-radius: 4px;
-    display: inline-block;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: all 0.2s;
+}
+
+.comment-delete-btn:hover {
+    background-color: #e94560;
+    color: white;
+    border-color: #e94560;
+}
+
+.add-comment {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.add-comment input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #2e3d4f;
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.add-comment input:focus {
+    border-color: #e94560;
+}
+
+.add-comment input::placeholder {
+    color: #475569;
+}
+
+.add-comment button {
+    background-color: #e94560;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.add-comment button:hover {
+    background-color: #c73652;
 }
