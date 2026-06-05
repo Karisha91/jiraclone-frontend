@@ -96,6 +96,7 @@ password: test
 - **Fully deployed** — both frontend and backend live and production ready
 - **Real-time Notifications** — WebSocket integration using STOMP over SockJS. Users receive instant in-app notifications when assigned to an issue. Notification bell shows unread count with a dropdown linking directly to the relevant issue.
 
+
 ---
 
 ## Architecture

@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { getNotificationsByUserId, Notification, markNotificationAsRead } from "../services/notificationService";
 
-export interface Notification {
-  message: string;
-  issueId: number;
-}
 
 export function useNotifications(userId: number | null) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+
+
+
+  useEffect(() => {
+    if (!userId) return;
+    getNotificationsByUserId(userId).then((data) => {
+    console.log(data);
+    setNotifications(data);
+});
+
+  }, [userId]);
 
   useEffect(() => {
     if (!userId) return;
@@ -31,5 +39,10 @@ export function useNotifications(userId: number | null) {
     };
   }, [userId]);
 
-  return { notifications };
+  const markAsRead = async (notificationId: number) => {
+    await markNotificationAsRead(notificationId);
+    setNotifications((prev) => prev.map((n) => n.id === notificationId ? { ...n, isRead: true } : n));
+  };
+
+  return { notifications, markAsRead };
 }
