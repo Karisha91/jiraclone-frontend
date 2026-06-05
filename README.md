@@ -87,6 +87,7 @@ password: password123
 - **Dashboard** — Live stats: total projects, total issues, breakdown by status
 - **Fully deployed** — both frontend and backend live and production ready
 
+
 ---
 
 ## Architecture

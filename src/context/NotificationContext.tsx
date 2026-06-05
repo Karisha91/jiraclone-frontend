@@ -3,10 +3,12 @@ import { Notification } from "../hooks/useNotifications";
 
 interface NotificationContextType {
   notifications: Notification[];
+  markAsRead: (notificationId: number) => void;
 }
 
 export const NotificationContext = createContext<NotificationContextType>({
   notifications: [],
+  markAsRead: () => {},
 });
 
 export function useNotificationContext() {

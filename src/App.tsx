@@ -18,10 +18,11 @@ function App() {
   const payload = token ? token.split('.')[1] : '';
   const decoded = payload ? JSON.parse(atob(payload)) : null;
   const userId = decoded?.userId ?? null;
+  
 
-  const { notifications } = useNotifications(userId);
+  const { notifications, markAsRead } = useNotifications(userId);
   return (
-    <NotificationContext.Provider value={{ notifications }}>
+    <NotificationContext.Provider value={{ notifications, markAsRead }}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
