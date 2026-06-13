@@ -15,6 +15,8 @@ function IssuesPage() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("ALL");
   const [filterPriority, setFilterPriority] = useState("ALL");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -45,12 +47,13 @@ function IssuesPage() {
 
   useEffect(() => {
     setLoading(true);
-      getIssuesByProjectId(Number(id))
+      getIssuesByProjectId(Number(id), currentPage)
       .then((data) => {
-        setIssues(data);
+        setTotalPages(data.totalPages);
+        setIssues(data.content);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, currentPage]);
 
   return (
   <div>
@@ -111,6 +114,19 @@ function IssuesPage() {
           </div>
         ))}
       </div>
+      <div className="pagination">
+  <button 
+    onClick={() => setCurrentPage(prev => prev - 1)} 
+    disabled={currentPage === 0}>
+    Previous
+  </button>
+  <span>Page {currentPage + 1} of {totalPages}</span>
+  <button 
+    onClick={() => setCurrentPage(prev => prev + 1)} 
+    disabled={currentPage === totalPages - 1}>
+    Next
+  </button>
+</div>
 
       <div className="add-issue-form">
         <h3>New Issue</h3>

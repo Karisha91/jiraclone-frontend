@@ -29,8 +29,17 @@ export interface Comment {
     author: string;
 }
 
-export const getIssuesByProjectId = async (id: number): Promise<Issue[]> => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues/project/${id}`, {
+export interface PageResponse<T> {
+    content: T[];
+    totalPages: number;
+    totalElements: number;
+    pageNumber: number;
+    last: boolean;
+    first: boolean;
+}
+
+export const getIssuesByProjectId = async (id: number,  page: number = 0, size: number = 10): Promise<PageResponse<Issue>> => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues/project/${id}?page=${page}&size=${size}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

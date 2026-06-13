@@ -233,3 +233,37 @@
 .add-issue-form button[type="submit"]:hover {
     background-color: #c73652;
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.pagination button {
+    background-color: transparent;
+    color: #94a3b8;
+    border: 1px solid #2e3d4f;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #e94560;
+    color: white;
+    border-color: #e94560;
+}
+
+.pagination button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    color: #64748b;
+    font-size: 13px;
+}

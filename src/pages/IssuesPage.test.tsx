@@ -42,10 +42,17 @@ describe('IssuesPage', () => {
 
     test('should show empty state when no issues', async () => {
         server.use(
-            http.get(`*/api/issues/project/:id`, () => {
-                return HttpResponse.json([])
-            })
-        )
+    http.get(`*/api/issues/project/:id`, () => {
+        return HttpResponse.json({
+            content: [],
+            totalPages: 0,
+            totalElements: 0,
+            pageNumber: 0,
+            last: true,
+            first: true
+        })
+    })
+)
         render(
             <MemoryRouter initialEntries={['/projects/1/issues']}>
                 <Routes>

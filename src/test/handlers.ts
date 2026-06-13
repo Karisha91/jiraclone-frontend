@@ -84,10 +84,15 @@ export const handlers = [
          return HttpResponse.json({id: 5, title: body.title, description: body.description, status: body.status, priority: body.priority})
     }),
     http.get(`*/api/issues/project/:id`, ({ params }) => {
-        const { id } = params
-        return HttpResponse.json(fakeIssues)
-
-    }),
+    return HttpResponse.json({
+        content: fakeIssues,
+        totalPages: 1,
+        totalElements: 4,
+        pageNumber: 0,
+        last: true,
+        first: true
+    })
+}),
     http.post('*/api/issues', async ({ request }) => {
     const body = await request.json() as { title: string, description: string, status: Status, priority: Priority }
     return HttpResponse.json({ id: 5, title: body.title, description: body.description, status: body.status, priority: body.priority, projectId: 1 })
