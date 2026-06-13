@@ -13,6 +13,10 @@ const fakeIssues = [
     {id: 3,title:"FakeTitle3", description: "fakeDesc3", status: "DONE", priority: "MEDIUM"},
     {id: 4,title:"FakeTitle4", description: "fakeDesc4", status: "IN_PROGRESS", priority: "CRITICAL"}
 ]
+const fakeComments = [
+    {id: 1, content: "Introduced testing for issue page", createdAt: "2026-05-03T10:00:00", author: "Ivan"},
+    {id: 2, content: "FakeComment2", createdAt: "2026-05-03T10:00:00", author: "Marko"},
+    {id: 3, content: "FakeComment3", createdAt: "2026-05-03T10:00:00", author: "Petar"}]
 
 export const handlers = [
     http.post('*/api/auth/login', () => {
@@ -61,9 +65,14 @@ export const handlers = [
     }),
     http.get(`*/api/comments/:id`, ({ params }) => {
         const { id } = params
-        return HttpResponse.json([{id:1 , content: "Introduced testing for issue page", createdAt: "2026-05-03T10:00:00" , author: "Ivan"},
-                                    {id:2 , content: "fixed testing for issue page", createdAt: "2026-05-03T10:00:00" , author: "Marko"}
-        ])
+        return HttpResponse.json({
+        content: fakeComments,
+        totalPages: 1,
+        totalElements: 4,
+        pageNumber: 0,
+        last: true,
+        first: true
+    })
 
     }),
     http.post(`*/api/comments`, async ({request}) => {
