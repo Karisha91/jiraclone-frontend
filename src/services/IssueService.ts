@@ -95,8 +95,8 @@ export const getIssueById =  async (id: number): Promise<Issue> => {
     return response.json();
 };
 
-export const getCommentsByIssueId = async (id: number): Promise<Comment[]> => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments/${id}`, {
+export const getCommentsByIssueId = async (id: number, page: number = 0, size: number = 5): Promise<PageResponse<Comment>> => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments/${id}?page=${page}&size=${size}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }

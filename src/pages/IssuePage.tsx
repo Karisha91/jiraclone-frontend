@@ -10,6 +10,7 @@ import {
   Comment,
   Status,
   Priority,
+  PageResponse,
 } from "../services/IssueService";
 import "./IssuePage.css";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +19,19 @@ function IssuePage() {
   const [issue, setIssue] = useState<Issue | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
-  const [comments, setComments] = useState<Comment[]>([]);
+const [comments, setComments] = useState<PageResponse<Comment>>({
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+    pageNumber: 0,
+    last: false,
+    first: true,
+});
+
   const [createComment, setCreateComment] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(0);
+  
 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -30,10 +42,13 @@ function IssuePage() {
   }, []);
 
   useEffect(() => {
-    getCommentsByIssueId(Number(id))
+    getCommentsByIssueId(Number(id), currentPage)
       
-      .then((data) => setComments(data));
-  }, [id]);
+      .then((data) => setComments({
+    ...data,
+    content: [...comments.content, ...data.content]
+}));
+}, [id, currentPage]);
 
   const addComment = async () => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
@@ -46,7 +61,11 @@ function IssuePage() {
     });
     if (response.ok) {
       const data = await response.json();
-      setComments([...comments, data]);
+      setComments({
+        ...comments,
+        content: [...comments.content, data],
+        totalElements: comments.totalElements + 1,
+      });
       setCreateComment("");
     }
   };
@@ -71,7 +90,11 @@ function IssuePage() {
 
   const deleteCom = async (commentId: number) => {
     await deleteComment(commentId);
-    setComments(comments.filter((comment) => comment.id !== commentId));
+    setComments({
+      ...comments,
+      content: comments.content.filter((comment: Comment) => comment.id !== commentId),
+      totalElements: comments.totalElements - 1,
+    });
   };
   
 
@@ -140,7 +163,7 @@ function IssuePage() {
 
       <div className="comments-section">
         <h3>Comments</h3>
-        {comments.map((comment) => (
+        {comments.content.map((comment) => (
           <div key={comment.id} className="comment-item">
             <p className="comment-author">{comment.author}</p>
             <p className="comment-content">{comment.content}</p>
@@ -150,6 +173,14 @@ function IssuePage() {
             <button className="comment-delete-btn" onClick={() => deleteCom(comment.id)}>Delete</button>
           </div>
         ))}
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={comments.last}
+          >
+            Show more...
+          </button>
+        </div>
         <div className="add-comment">
           <input
             type="text"
