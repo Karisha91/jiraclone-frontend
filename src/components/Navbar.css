@@ -93,3 +93,9 @@
   color: #64748b;
   font-size: 0.85rem;
 }
+.navbar-dropdown-item.unread {
+  background-color: #1a2a4a;
+  border-left: 3px solid #e94560;
+  font-weight: 600;
+  color: #ffffff;
+}

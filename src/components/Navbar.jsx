@@ -50,9 +50,8 @@ function Navbar() {
               <p className="navbar-dropdown-empty">No notifications</p>
             ) : (
               notifications.slice().sort((a, b) => b.id - a.id).map((notification, index) => (
-                <div
+                <div className={notification.isRead ? "navbar-dropdown-item" : "navbar-dropdown-item unread"}
                   key={index}
-                  className="navbar-dropdown-item"
                   onClick={() => {
                     markAsRead(notification.id);
                     setIsOpen(false);
