@@ -38,6 +38,11 @@ export interface PageResponse<T> {
     first: boolean;
 }
 
+export interface User {
+  id: number;
+  username: string;
+}
+
 export const getIssuesByProjectId = async (id: number,  page: number = 0, size: number = 10): Promise<PageResponse<Issue>> => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues/project/${id}?page=${page}&size=${size}`, {
       headers: {
@@ -120,4 +125,24 @@ export const getAllIssues = async (): Promise<Issue[]> => {
         }
     });
     return response.json();
+}
+
+export const getAllDevelopers = async (): Promise<User[]> => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/developers`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  });
+  return response.json();
+}
+
+export const assignDeveloperToIssue = async (issueId: number, developerId: number): Promise<Response> => {
+  return fetch(`${import.meta.env.VITE_API_URL}/api/issues/${issueId}/assign`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ assigneeId: developerId }),
+  });
 }

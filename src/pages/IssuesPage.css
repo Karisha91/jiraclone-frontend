@@ -163,6 +163,7 @@
     cursor: pointer;
     transition: all 0.2s;
     width: auto !important;
+    margin-right: 8px;
 }
 
 .delete-btn:hover {
@@ -266,4 +267,84 @@
 .pagination span {
     color: #64748b;
     font-size: 13px;
+}
+.assign-btn {
+    background-color: transparent;
+    color: #64748b;
+    border: 1px solid #2e3d4f;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: auto !important;
+}
+.assign-btn:hover {
+    background-color: #45e945;
+    color: white;
+    border-color: #6be945;
+}
+.assignee-info {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background-color: #334155;
+    color: #94a3b8;
+    margin-left: 0;
+    white-space: nowrap;
+}
+.assign-developer {
+    background: #0f172a;
+    border: 1px solid #2e3d4f;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.assign-developer h5 {
+    color: #f1f5f9;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.assign-developer select {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid #2e3d4f;
+    background-color: #1e293b;
+    color: #f1f5f9;
+    font-size: 12px;
+    outline: none;
+    transition: all 0.2s;
+    width: auto;
+}
+
+.assign-developer select:focus {
+    border-color: #e94560;
+}
+
+.assign-developer button {
+    background-color: #e94560;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: auto;
+    white-space: nowrap;
+}
+
+.assign-developer button:hover {
+    background-color: #c73652;
 }
