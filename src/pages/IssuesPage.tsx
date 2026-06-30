@@ -74,6 +74,7 @@ function IssuesPage() {
   const getDevelopers = async () => {
     await getAllDevelopers().then((data) => {
       setDevelopers(data);
+      setSelectedDeveloperId(data[0]?.id || null);
     });
     
 
@@ -233,6 +234,7 @@ function IssuesPage() {
               <button className="assign-btn" 
               onClick={() => {
                 setSelectedIssueId(issue.id);
+                setSelectedDeveloperId(null);
                 getDevelopers();
               }}>
                 Assign
@@ -252,9 +254,11 @@ function IssuesPage() {
                 </option>
               ))}
             </select>
-            <button onClick={() => {
-              handleAssignDeveloper(issue.id, selectedDeveloperId!);
+            <button onClick={ async () => {
+              await handleAssignDeveloper(issue.id, selectedDeveloperId!);
               setSelectedIssueId(null);
+              setSelectedDeveloperId(null);
+              
             }}>
               Confirm
             </button>
