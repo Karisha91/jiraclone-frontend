@@ -11,6 +11,9 @@ import {
   Issue,
   Status,
   Priority,
+  getAllDevelopers,
+  User,
+  assignDeveloperToIssue,
 } from "../services/IssueService";
 
 function IssuesPage() {
@@ -24,6 +27,10 @@ function IssuesPage() {
   const [filterPriority, setFilterPriority] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [developers, setDevelopers] = useState<User[]>([]);
+  const [selectedIssueId, setSelectedIssueId] = useState<number | null>(null);
+  const [selectedDeveloperId, setSelectedDeveloperId] = useState<number | null>(null);
+
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -63,6 +70,22 @@ function IssuesPage() {
     setFilter("ALL");
     setFilterPriority("ALL");
   };
+
+  const getDevelopers = async () => {
+    await getAllDevelopers().then((data) => {
+      setDevelopers(data);
+    });
+    
+
+  }
+
+ const handleAssignDeveloper = async (issueId: number, developerId: number) => {
+   const response = await assignDeveloperToIssue(issueId, developerId);
+   const updatedIssue = await response.json();
+   setIssues(issues.map((issue) => 
+       issue.id === issueId ? updatedIssue : issue
+   ));
+};
 
   useEffect(() => {
     setLoading(true);
@@ -192,7 +215,14 @@ function IssuesPage() {
                   }`}
                 >
                   {issue.priority}
+                  
                 </span>
+                <span className="assignee-info">
+                  {issue.assigneeUsername
+                    ? `Assigned to: ${issue.assigneeUsername}`
+                    : "Unassigned"}
+                </span>
+
               </div>
               <button
                 className="delete-btn"
@@ -200,9 +230,43 @@ function IssuesPage() {
               >
                 Delete
               </button>
+              <button className="assign-btn" 
+              onClick={() => {
+                setSelectedIssueId(issue.id);
+                getDevelopers();
+              }}>
+                Assign
+              </button>
+              {issue.id === selectedIssueId && developers.length > 0 && (
+          <div className="assign-developer">
+            <h5>Assign Developer</h5>
+            <select
+              value={selectedDeveloperId || ""}
+              onChange={(e) => {setSelectedDeveloperId(Number(e.target.value))
+                
+              }}
+            > 
+              {developers.map((dev) => (
+                <option key={dev.id} value={dev.id}>
+                  {dev.username}
+                </option>
+              ))}
+            </select>
+            <button onClick={() => {
+              handleAssignDeveloper(issue.id, selectedDeveloperId!);
+              setSelectedIssueId(null);
+            }}>
+              Confirm
+            </button>
+          </div>
+        )}
             </div>
           ))}
+          
         </div>
+        
+        
+        
         <div className="pagination">
           <button
             onClick={() => setCurrentPage((prev) => prev - 1)}
