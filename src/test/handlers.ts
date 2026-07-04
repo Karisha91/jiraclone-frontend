@@ -17,6 +17,11 @@ const fakeComments = [
     {id: 1, content: "Introduced testing for issue page", createdAt: "2026-05-03T10:00:00", author: "Ivan"},
     {id: 2, content: "FakeComment2", createdAt: "2026-05-03T10:00:00", author: "Marko"},
     {id: 3, content: "FakeComment3", createdAt: "2026-05-03T10:00:00", author: "Petar"}]
+    
+const fakeDevelopers = [
+    { id: 1, username: "Marko" },
+    { id: 2, username: "Petar" }
+]
 
 export const handlers = [
     http.post('*/api/auth/login', () => {
@@ -47,6 +52,24 @@ export const handlers = [
             ) 
         
     }),
+    http.get(`*/api/users/developers`, () => {
+    return HttpResponse.json(fakeDevelopers)
+}),
+http.put(`*/api/issues/:id/assign`, async ({ params, request }) => {
+    const { id } = params
+    const body = await request.json() as { assigneeId: number }
+    return HttpResponse.json({
+        id: Number(id),
+        title: "TestIssue",
+        description: "TestDescription",
+        status: "IN_REVIEW",
+        priority: "LOW",
+        projectName: "TestProject",
+        reporterUsername: "Ivan",
+        assigneeUsername: fakeDevelopers.find(d => d.id === body.assigneeId)?.username ?? null,
+        projectId: 1
+    })
+}),
     http.post(`*/api/projects`, async ({ request }) => {
         const body = await request.json() as {name: string, description: string}
         return HttpResponse.json({ id: 3, projectName: body.name, description: body.description })
