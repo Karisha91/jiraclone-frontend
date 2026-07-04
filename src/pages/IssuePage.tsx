@@ -19,7 +19,8 @@ function IssuePage() {
   const [issue, setIssue] = useState<Issue | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState("");
-const [comments, setComments] = useState<PageResponse<Comment>>({
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [comments, setComments] = useState<PageResponse<Comment>>({
     content: [],
     totalPages: 0,
     totalElements: 0,
@@ -51,7 +52,8 @@ const [comments, setComments] = useState<PageResponse<Comment>>({
 }, [id, currentPage]);
 
   const addComment = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
+
+    try {const response = await fetch(`${import.meta.env.VITE_API_URL}/api/comments`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -59,44 +61,65 @@ const [comments, setComments] = useState<PageResponse<Comment>>({
       },
       body: JSON.stringify({ content: createComment, issue: { id: issue?.id } }),
     });
-    if (response.ok) {
-      const data = await response.json();
+   if (!response.ok) {
+      setError(`You are not authorized to create this comment: ${response.statusText}`);
+      return;
+    }
+    const data = await response.json();
       setComments({
         ...comments,
         content: [...comments.content, data],
         totalElements: comments.totalElements + 1,
       });
       setCreateComment("");
+    } catch (error: unknown) {
+      setError(`Error creating comment: ${error}`);
     }
-  };
+
+  }
+    
 
   const update = async () => {
     if (!issue) return;
-    updateIssue(
+    try {
+      const response = await updateIssue(
       issue.title,
       issue.description,
       issue.status,
       issue.priority,
       issue.id,
-    ).then((res) => {
-      if (res.ok) {
-        setError("Update successful");
+    )
+    if (!response.ok) {
+      setError(`You are not authorized to update this issue: ${response.statusText}`);
+      return;
+
+    }
+    setSuccessMessage("Update successful");
         setIsEditing(false);
-      } else {
-        setError("Failed to update issue");
-      }
-    });
+
+  } catch (error: unknown) {
+      setError(`Error updating issue: ${error}`);
+    }
+
   };
 
   const deleteCom = async (commentId: number) => {
-    await deleteComment(commentId);
-    setComments({
+    try {
+      const response = await deleteComment(commentId);
+      if (!response.ok) {
+        setError(`You are not authorized to delete this comment: ${response.statusText}`);
+        return;
+      }
+      setComments({
       ...comments,
       content: comments.content.filter((comment: Comment) => comment.id !== commentId),
       totalElements: comments.totalElements - 1,
     });
+    } catch (error: unknown) {
+      setError(`Error deleting comment: ${error}`);
+    }
+    
   };
-  
 
   return (
   <div>
@@ -111,7 +134,8 @@ const [comments, setComments] = useState<PageResponse<Comment>>({
         )}
       </div>
 
-      {error && <p className="success-msg">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-msg">{successMessage}</p>}
 
       {issue && !isEditing && (
         <div className="issue-details-card">
