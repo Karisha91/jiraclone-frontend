@@ -29,8 +29,10 @@ function IssuesPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [developers, setDevelopers] = useState<User[]>([]);
   const [selectedIssueId, setSelectedIssueId] = useState<number | null>(null);
-  const [selectedDeveloperId, setSelectedDeveloperId] = useState<number | null>(null);
-
+  const [selectedDeveloperId, setSelectedDeveloperId] = useState<number | null>(
+    null,
+  );
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -45,30 +47,46 @@ function IssuesPage() {
       : filteredIssues.filter((issue) => issue.priority === filterPriority);
 
   const handleDeleteIssue = async (issueId: number) => {
-    await deleteIssue(issueId).then(() => {
+    try {
+      const response = await deleteIssue(issueId);
+      if (!response.ok) {
+        setError(`You are not authorized to delete this issue: ${response.statusText}`
+        );
+        return;
+      }
       setIssues(issues.filter((issue) => issue.id !== issueId));
-    });
+    } catch (error: unknown) {
+      setError(`Error deleting issue: ${error}`);
+    }
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,): Promise<void> => {
     e.preventDefault();
     if (!id) return;
-    const response = await createIssue(
-      title,
-      description,
-      status as Status,
-      priority as Priority,
-      Number(id),
-    );
-    const newIssue = await response.json();
+    try {
+      const response = await createIssue(
+        title,
+        description,
+        status as Status,
+        priority as Priority,
+        Number(id),
+      );
+      if (!response.ok) {
+        setError(`You are not authorized to create this issue: ${response.statusText}`
+        );
+        return;
+      }
 
-    setIssues([...issues, newIssue]);
-    setTitle("");
-    setDescription("");
-    setFilter("ALL");
-    setFilterPriority("ALL");
+      const newIssue = await response.json();
+
+      setIssues([...issues, newIssue]);
+      setTitle("");
+      setDescription("");
+      setFilter("ALL");
+      setFilterPriority("ALL");
+    } catch (error: unknown) {
+      setError(`Error creating issue: ${error}`);
+    }
   };
 
   const getDevelopers = async () => {
@@ -76,17 +94,27 @@ function IssuesPage() {
       setDevelopers(data);
       setSelectedDeveloperId(data[0]?.id || null);
     });
-    
+  };
 
+  const handleAssignDeveloper = async (issueId: number, developerId: number,) => {
+    try {
+      const response = await assignDeveloperToIssue(issueId, developerId);
+      if (!response.ok) {
+        setError(`You are not authorized to assign a developer to this issue: ${response.statusText}`
+        );
+        return;
+      }
+      const updatedIssue = await response.json();
+      setIssues(
+        issues.map((issue) => (issue.id === issueId ? updatedIssue : issue)),
+      );
+    } catch (error: unknown) {
+      setError(`Error assigning developer: ${error}`);
+    }
   }
-
- const handleAssignDeveloper = async (issueId: number, developerId: number) => {
-   const response = await assignDeveloperToIssue(issueId, developerId);
-   const updatedIssue = await response.json();
-   setIssues(issues.map((issue) => 
-       issue.id === issueId ? updatedIssue : issue
-   ));
-};
+    
+    
+    
 
   useEffect(() => {
     setLoading(true);
@@ -96,6 +124,10 @@ function IssuesPage() {
       setLoading(false);
     });
   }, [id, currentPage]);
+
+  useEffect(() => {
+    getDevelopers();
+  }, []);
 
   return (
     <div>
@@ -216,14 +248,12 @@ function IssuesPage() {
                   }`}
                 >
                   {issue.priority}
-                  
                 </span>
                 <span className="assignee-info">
                   {issue.assigneeUsername
                     ? `Assigned to: ${issue.assigneeUsername}`
                     : "Unassigned"}
                 </span>
-
               </div>
               <button
                 className="delete-btn"
@@ -231,46 +261,46 @@ function IssuesPage() {
               >
                 Delete
               </button>
-              <button className="assign-btn" 
-              onClick={() => {
-                setSelectedIssueId(issue.id);
-                setSelectedDeveloperId(null);
-                getDevelopers();
-              }}>
+              <button
+                className="assign-btn"
+                onClick={() => {
+                  setSelectedIssueId(issue.id);
+                }}
+              >
                 Assign
               </button>
               {issue.id === selectedIssueId && developers.length > 0 && (
-          <div className="assign-developer">
-            <h5>Assign Developer</h5>
-            <select
-              value={selectedDeveloperId || ""}
-              onChange={(e) => {setSelectedDeveloperId(Number(e.target.value))
-                
-              }}
-            > 
-              {developers.map((dev) => (
-                <option key={dev.id} value={dev.id}>
-                  {dev.username}
-                </option>
-              ))}
-            </select>
-            <button onClick={ async () => {
-              await handleAssignDeveloper(issue.id, selectedDeveloperId!);
-              setSelectedIssueId(null);
-              setSelectedDeveloperId(null);
-              
-            }}>
-              Confirm
-            </button>
-          </div>
-        )}
+                <div className="assign-developer">
+                  <h5>Assign Developer</h5>
+                  <select
+                    value={selectedDeveloperId || ""}
+                    onChange={(e) => {
+                      setSelectedDeveloperId(Number(e.target.value));
+                    }}
+                  >
+                    {developers.map((dev) => (
+                      <option key={dev.id} value={dev.id}>
+                        {dev.username}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={async () => {
+                      await handleAssignDeveloper(
+                        issue.id,
+                        selectedDeveloperId!,
+                      );
+                      setSelectedIssueId(null);
+                    }}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              )}
             </div>
           ))}
-          
         </div>
-        
-        
-        
+
         <div className="pagination">
           <button
             onClick={() => setCurrentPage((prev) => prev - 1)}
@@ -288,6 +318,9 @@ function IssuesPage() {
             Next
           </button>
         </div>
+        {error && 
+        <p className="error-message">{error}
+        </p>}
 
         <div className="add-issue-form">
           <h3>New Issue</h3>
