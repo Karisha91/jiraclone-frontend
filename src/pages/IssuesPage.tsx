@@ -15,6 +15,7 @@ import {
   User,
   assignDeveloperToIssue,
 } from "../services/IssueService";
+import { getUserIdFromToken } from "../utils/auth";
 
 function IssuesPage() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -33,6 +34,7 @@ function IssuesPage() {
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const defaultAvatarUrl = "https://wp.cskejsaren.se/wp-content/uploads/2026/05/CS2-Default-Knife.webp";
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -64,12 +66,18 @@ function IssuesPage() {
     e.preventDefault();
     if (!id) return;
     try {
+      const userId = getUserIdFromToken();
+      if (!userId) {
+        setError("User ID not found");
+        return;
+      }
       const response = await createIssue(
         title,
         description,
         status as Status,
         priority as Priority,
         Number(id),
+        userId,
       );
       if (!response.ok) {
         setError(`You are not authorized to create this issue: ${response.statusText}`
@@ -128,6 +136,8 @@ function IssuesPage() {
   useEffect(() => {
     getDevelopers();
   }, []);
+
+    
 
   return (
     <div>
@@ -220,7 +230,15 @@ function IssuesPage() {
 
         <div className="issues-list">
           {filteredIssuesByPriority.map((issue) => (
+            
+            
             <div key={issue.id} className="issues-item">
+              <img
+                  src={developers.find((dev) => dev.username === issue.reporterUsername)?.avatarUrl || defaultAvatarUrl}
+                  alt={issue.reporterUsername}
+                  className="assignee-avatar"
+                />
+              
               <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
               <div className="issue-meta">
                 <span
@@ -251,9 +269,16 @@ function IssuesPage() {
                 </span>
                 <span className="assignee-info">
                   {issue.assigneeUsername
-                    ? `Assigned to: ${issue.assigneeUsername}`
+                    ? `Assigned to: ${issue.assigneeUsername} `
                     : "Unassigned"}
+
                 </span>
+                
+                <img
+                  src={developers.find((dev) => dev.username === issue.assigneeUsername)?.avatarUrl || defaultAvatarUrl}
+                  alt={issue.assigneeUsername}
+                  className="assignee-avatar"
+                />
               </div>
               <button
                 className="delete-btn"

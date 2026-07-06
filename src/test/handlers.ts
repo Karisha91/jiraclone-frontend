@@ -23,6 +23,12 @@ const fakeDevelopers = [
     { id: 2, username: "Petar" }
 ]
 
+const createFakeToken = (payload: object) => {
+    const header = btoa(JSON.stringify({ alg: 'none', typ: 'JWT' }))
+    const body = btoa(JSON.stringify(payload))
+    return `${header}.${body}.fakesignature`
+}
+
 export const handlers = [
     http.post('*/api/auth/login', () => {
         return HttpResponse.json(

@@ -41,6 +41,7 @@ export interface PageResponse<T> {
 export interface User {
   id: number;
   username: string;
+  avatarUrl: string;
 }
 
 export const getIssuesByProjectId = async (id: number,  page: number = 0, size: number = 10): Promise<PageResponse<Issue>> => {
@@ -62,7 +63,7 @@ export const deleteIssue = async (issueId: number): Promise<Response> => {
     });
 };
 
-export const createIssue = async (title: string, description: string, status: Status, priority: Priority, id: number): Promise<Response> => {
+export const createIssue = async (title: string, description: string, status: Status, priority: Priority, id: number, reporterId: number): Promise<Response> => {
     return fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
           method: "POST",
           headers: {
@@ -75,6 +76,7 @@ export const createIssue = async (title: string, description: string, status: St
             status,
             priority,
             project: { id: id },
+            reporter: { id: reporterId }
           }),
         });
 };

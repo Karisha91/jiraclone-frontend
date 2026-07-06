@@ -6,7 +6,18 @@ import IssuesPage from './IssuesPage'
 import { server } from '../test/server'
 import { http, HttpResponse } from 'msw'
 
+
+const createFakeToken = (payload: object) => {
+    const header = btoa(JSON.stringify({ alg: 'none', typ: 'JWT' }))
+    const body = btoa(JSON.stringify(payload))
+    return `${header}.${body}.fakesignature`
+}
+
 describe('IssuesPage', () => {
+    beforeEach(() => {
+        localStorage.setItem('token', createFakeToken({ userId: 1 }))
+    })
+
     test('should render issues page', () => {
         render(
             <MemoryRouter initialEntries={['/projects/1/issues']}>
@@ -42,17 +53,17 @@ describe('IssuesPage', () => {
 
     test('should show empty state when no issues', async () => {
         server.use(
-    http.get(`*/api/issues/project/:id`, () => {
-        return HttpResponse.json({
-            content: [],
-            totalPages: 0,
-            totalElements: 0,
-            pageNumber: 0,
-            last: true,
-            first: true
-        })
-    })
-)
+            http.get(`*/api/issues/project/:id`, () => {
+                return HttpResponse.json({
+                    content: [],
+                    totalPages: 0,
+                    totalElements: 0,
+                    pageNumber: 0,
+                    last: true,
+                    first: true
+                })
+            })
+        )
         render(
             <MemoryRouter initialEntries={['/projects/1/issues']}>
                 <Routes>
@@ -61,8 +72,9 @@ describe('IssuesPage', () => {
             </MemoryRouter>
         )
         expect(await screen.findByText('No issues found. Add one below.')).toBeInTheDocument()
-    }),
-    test('should filter issues by status',async () => {
+    })
+
+    test('should filter issues by status', async () => {
         render(
             <MemoryRouter initialEntries={['/projects/1/issues']}>
                 <Routes>
@@ -71,11 +83,12 @@ describe('IssuesPage', () => {
             </MemoryRouter>
         )
         const user = userEvent.setup()
-        await user.click(screen.getByRole('button', {name: /To do/i}))
+        await user.click(screen.getByRole('button', { name: /To do/i }))
         expect(await screen.findByText('FakeTitle2')).toBeInTheDocument()
         expect(screen.queryByText('FakeTitle')).not.toBeInTheDocument()
-    }),
-    test('should create a new issue',async () => {
+    })
+
+    test('should create a new issue', async () => {
         render(
             <MemoryRouter initialEntries={['/projects/1/issues']}>
                 <Routes>
@@ -88,10 +101,11 @@ describe('IssuesPage', () => {
         await user.type(screen.getByPlaceholderText(/Issue description/i), 'IssueDescriptionTest')
         await user.selectOptions(screen.getAllByRole('combobox')[0], 'DONE')
         await user.selectOptions(screen.getAllByRole('combobox')[1], 'MEDIUM')
-        await user.click(screen.getByRole('button', {name: /Create Issue/i}))
-        expect(screen.getByText('testIssue')).toBeInTheDocument()
-    }),
-    test('should delete issue',async () => {
+        await user.click(screen.getByRole('button', { name: /Create Issue/i }))
+        expect(await screen.findByText('testIssue')).toBeInTheDocument()
+    })
+
+    test('should delete issue', async () => {
         render(
             <MemoryRouter initialEntries={['/projects/1/issues']}>
                 <Routes>
@@ -101,7 +115,7 @@ describe('IssuesPage', () => {
         )
         const user = userEvent.setup()
         await screen.findByText('FakeTitle')
-        await user.click(screen.getAllByRole('button', {name: /delete/i})[0])
+        await user.click(screen.getAllByRole('button', { name: /delete/i })[0])
         expect(screen.queryByText('FakeTitle')).not.toBeInTheDocument()
     })
 })
