@@ -21,12 +21,15 @@ export interface Issue {
     reporterUsername: string;
     assigneeUsername: string;
     projectId: number;
+    assigneeAvatarUrl?: string;
+    reporterAvatarUrl?: string;
 }
 export interface Comment {
     id: number;
     content: string;
     createdAt: string;
     author: string;
+    authorAvatarUrl?: string;
 }
 
 export interface PageResponse<T> {

@@ -234,7 +234,7 @@ function IssuesPage() {
             
             <div key={issue.id} className="issues-item">
               <img
-                  src={developers.find((dev) => dev.username === issue.reporterUsername)?.avatarUrl || defaultAvatarUrl}
+                  src={issue.reporterAvatarUrl || defaultAvatarUrl}
                   alt={issue.reporterUsername}
                   className="assignee-avatar"
                 />
@@ -275,7 +275,7 @@ function IssuesPage() {
                 </span>
                 
                 <img
-                  src={developers.find((dev) => dev.username === issue.assigneeUsername)?.avatarUrl || defaultAvatarUrl}
+                  src={issue.assigneeAvatarUrl || defaultAvatarUrl}
                   alt={issue.assigneeUsername}
                   className="assignee-avatar"
                 />
