@@ -10,6 +10,7 @@ import IssuePage from "./pages/IssuePage";
 import { Navigate } from "react-router-dom";
 import { useNotifications } from "./hooks/useNotifications";
 import { NotificationContext } from "./context/NotificationContext";
+import AuditLogsPage from "./pages/AuditLogsPage";
 
 
 function App() {
@@ -25,6 +26,11 @@ function App() {
     <NotificationContext.Provider value={{ notifications, markAsRead }}>
     <BrowserRouter>
       <Routes>
+        <Route path="/admin/audit-logs" element={
+          <ProtectedRoute>
+            <AuditLogsPage />
+          </ProtectedRoute>
+        } />
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

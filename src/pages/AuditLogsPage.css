@@ -1,0 +1,125 @@
+.audit-logs-container {
+    min-height: calc(100vh - 60px);
+    background-color: #0f172a;
+    padding: 40px;
+}
+
+.audit-logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.audit-logs-header h1 {
+    color: #f1f5f9;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.audit-logs-empty {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+.audit-logs-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    table-layout: fixed;
+}
+
+.audit-logs-table th,
+.audit-logs-table td {
+    padding: 14px 16px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.audit-logs-table thead tr {
+    background-color: transparent;
+    border: none;
+}
+
+.audit-logs-table th {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.audit-logs-table tbody tr {
+    background-color: #1e293b;
+    transition: border-color 0.2s;
+}
+
+.audit-logs-table tbody td:first-child {
+    border-left: 1px solid #2e3d4f;
+    border-radius: 10px 0 0 10px;
+}
+
+.audit-logs-table tbody td:last-child {
+    border-right: 1px solid #2e3d4f;
+    border-radius: 0 10px 10px 0;
+}
+
+.audit-logs-table tbody td {
+    border-top: 1px solid #2e3d4f;
+    border-bottom: 1px solid #2e3d4f;
+}
+
+.audit-logs-table tbody tr:hover td {
+    border-color: #e94560;
+}
+
+.audit-logs-table th:nth-child(1),
+.audit-logs-table td:nth-child(1) { width: 12%; }
+
+.audit-logs-table th:nth-child(2),
+.audit-logs-table td:nth-child(2) { width: 20%; }
+
+.audit-logs-table th:nth-child(3),
+.audit-logs-table td:nth-child(3) { width: 20%; }
+
+.audit-logs-table th:nth-child(4),
+.audit-logs-table td:nth-child(4) { width: 12%; }
+
+.audit-logs-table th:nth-child(5),
+.audit-logs-table td:nth-child(5) { width: 10%; }
+
+.audit-logs-table th:nth-child(6),
+.audit-logs-table td:nth-child(6) { width: 26%; }
+
+.audit-action-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background-color: #334155;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.audit-time {
+    color: #64748b;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.audit-entity-type {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.audit-username {
+    color: #e94560;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
