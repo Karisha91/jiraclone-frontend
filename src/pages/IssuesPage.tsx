@@ -44,8 +44,7 @@ function IssuesPage() {
   const filteredIssues = filter === "ALL" ? issues : issues.filter((issue) => issue.status === filter);
   const filteredIssuesByPriority = filterPriority === "ALL" ? filteredIssues : filteredIssues.filter((issue) => issue.priority === filterPriority);
   const filteredByAssignee = showMyIssues ? filteredIssuesByPriority.filter((issue) => { 
-   return issue.assigneeUsername === getUsernameFromToken();
-}) : filteredIssuesByPriority;
+   return issue.assigneeUsername === getUsernameFromToken()}) : filteredIssuesByPriority;
 
   const handleToggleMyIssues = () => {
     setShowMyIssues(prev => !prev);
