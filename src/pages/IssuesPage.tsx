@@ -15,7 +15,7 @@ import {
   User,
   assignDeveloperToIssue,
 } from "../services/IssueService";
-import { getUserIdFromToken } from "../utils/auth";
+import { getUserIdFromToken, getUsernameFromToken } from "../utils/auth";
 
 function IssuesPage() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -34,19 +34,24 @@ function IssuesPage() {
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const [showMyIssues, setShowMyIssues] = useState(false);
+  
   const defaultAvatarUrl = "https://wp.cskejsaren.se/wp-content/uploads/2026/05/CS2-Default-Knife.webp";
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const filteredIssues =
-    filter === "ALL"
-      ? issues
-      : issues.filter((issue) => issue.status === filter);
-  const filteredIssuesByPriority =
-    filterPriority === "ALL"
-      ? filteredIssues
-      : filteredIssues.filter((issue) => issue.priority === filterPriority);
+  const filteredIssues = filter === "ALL" ? issues : issues.filter((issue) => issue.status === filter);
+  const filteredIssuesByPriority = filterPriority === "ALL" ? filteredIssues : filteredIssues.filter((issue) => issue.priority === filterPriority);
+  const filteredByAssignee = showMyIssues ? filteredIssuesByPriority.filter((issue) => { 
+   return issue.assigneeUsername === getUsernameFromToken();
+}) : filteredIssuesByPriority;
+
+  const handleToggleMyIssues = () => {
+    setShowMyIssues(prev => !prev);
+  };
+
+  
 
   const handleDeleteIssue = async (issueId: number) => {
     try {
@@ -119,10 +124,11 @@ function IssuesPage() {
     } catch (error: unknown) {
       setError(`Error assigning developer: ${error}`);
     }
-  }
-    
-    
-    
+  };
+
+  
+
+  
 
   useEffect(() => {
     setLoading(true);
@@ -220,6 +226,14 @@ function IssuesPage() {
                 Critical
               </button>
             </div>
+             <p className="filter-label">Assigned to me</p>
+             <button
+               className={`filter-btn ${showMyIssues ? "active" : ""}`}
+               onClick={handleToggleMyIssues}
+             >
+               My issues
+             </button>
+
           </div>
         </div>
 
@@ -229,7 +243,7 @@ function IssuesPage() {
         )}
 
         <div className="issues-list">
-          {filteredIssuesByPriority.map((issue) => (
+          {filteredByAssignee.map((issue) => (
             
             
             <div key={issue.id} className="issues-item">
