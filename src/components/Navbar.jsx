@@ -3,12 +3,16 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { useNotificationContext } from "../context/NotificationContext";
 import { useState, useRef, useEffect } from "react";
+import { getUserRoleFromToken } from "../utils/auth";
 
 function Navbar() {
   const { notifications, markAsRead } = useNotificationContext();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  const user = getUserRoleFromToken();
+  
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -65,6 +69,12 @@ function Navbar() {
           </div>
         )}
       </div>
+      {user === "ADMIN" && (
+        <Link to="/admin/audit-logs" className="navbar-admin-link">
+          Admin Panel
+        </Link>
+      )}
+
       <button className="navbar-logout" onClick={handleLogout}>
         Logout
       </button>
