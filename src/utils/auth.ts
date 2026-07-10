@@ -26,3 +26,19 @@ export const getUsernameFromToken = (): string | null => {
     return null;
   }
 };
+
+
+export const getUserRoleFromToken = (): string | null => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded?.roles ?? null;
+  } catch (error) {
+    console.error('Error getting user role from token:', error);
+    return null;
+  }
+
+};
