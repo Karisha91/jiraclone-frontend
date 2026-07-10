@@ -20,8 +20,13 @@ function ProjectsPage() {
     try {
       const response = await deleteProject(id);
       if (!response.ok) {
-        setError(`You are not authorized to delete this project: ${response.statusText}`
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to delete this project");
+        } else if (response.status === 404) {
+          setError("Project not found");
+        } else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
       setProjects(projects.filter((project) => project.id !== id));
@@ -38,8 +43,15 @@ function ProjectsPage() {
       const response = await createProject(projectName, description);
 
       if (!response.ok) {
-        setError(`You are not authorized to create this project: ${response.statusText}`
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to create a project");
+        }
+        else if (response.status === 400) {
+          setError("Invalid project data");
+        }
+        else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
 
@@ -48,8 +60,7 @@ function ProjectsPage() {
       setProjectName("");
       setDescription("");
     } catch (error: unknown) {
-      setError(`Error creating project: ${error}`
-      );
+      setError(`Error creating project: ${error}`);
     }
   };
 
@@ -90,10 +101,8 @@ function ProjectsPage() {
             </div>
           ))}
         </div>
-        
-        {error && 
-        <p className="error-message">{error}
-        </p>}
+
+        {error && <p className="error-message">{error}</p>}
 
         <div className="add-project-form">
           <h3>New Project</h3>
