@@ -31,6 +31,8 @@ function LoginPage() {
             setError("Invalid request");
         }  else if (response.status === 500) {
             setError("Server error, please try again later");
+        } else if (response.status === 429) {
+            setError("Too many requests, please try again later");
         } else {
             setError("Something went wrong, please try again");
         }

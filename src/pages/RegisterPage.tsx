@@ -24,6 +24,8 @@ function RegisterPage() {
       setError("Invalid registration data");
     } else if (response.status === 409) {
       setError("Username or email already exists");
+    } else if (response.status === 429) {
+      setError("Too many requests, please try again later");
     }
     else {
       setError("Something went wrong, please try again");
