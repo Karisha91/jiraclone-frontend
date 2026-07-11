@@ -19,7 +19,7 @@ describe('RegisterPage', () => {
         await user.type(screen.getByPlaceholderText(/email/i), '123@gmail.com')
         await user.selectOptions(screen.getByRole('combobox'), 'USER')
         await user.click(screen.getByRole('button', {name: /register/i}))
-        expect(screen.getByText('Registration failed. Please check your details and try again.')).toBeInTheDocument()
+        expect(screen.getByText('Invalid registration data')).toBeInTheDocument()
 
     })
     test('should redirect to Login on successful register', async () => {

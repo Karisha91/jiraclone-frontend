@@ -68,9 +68,14 @@ function IssuePage() {
         },
       );
       if (!response.ok) {
-        setError(
-          `You are not authorized to create this comment: ${response.statusText}`,
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to create a comment");
+        } else if (response.status === 400) {
+          setError("Invalid comment data");
+        }
+        else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
       const data = await response.json();
@@ -96,9 +101,11 @@ function IssuePage() {
         issue.id,
       );
       if (!response.ok) {
-        setError(
-          `You are not authorized to update this issue: ${response.statusText}`,
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to update this issue");
+        } else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
       setSuccessMessage("Update successful");
@@ -112,9 +119,11 @@ function IssuePage() {
     try {
       const response = await deleteComment(commentId);
       if (!response.ok) {
-        setError(
-          `You are not authorized to delete this comment: ${response.statusText}`,
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to delete this comment");
+        } else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
       setComments({

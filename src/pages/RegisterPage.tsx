@@ -20,9 +20,15 @@ function RegisterPage() {
     });
     if (response.ok) {
       navigate("/login");
-    } else {
-      setError("Registration failed. Please check your details and try again.");
+    } else if (response.status === 400) {
+      setError("Invalid registration data");
+    } else if (response.status === 409) {
+      setError("Username or email already exists");
     }
+    else {
+      setError("Something went wrong, please try again");
+    }
+    
   };
 
   return (

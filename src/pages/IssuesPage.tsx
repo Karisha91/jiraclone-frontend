@@ -56,8 +56,13 @@ function IssuesPage() {
     try {
       const response = await deleteIssue(issueId);
       if (!response.ok) {
-        setError(`You are not authorized to delete this issue: ${response.statusText}`
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to delete this issue");
+        } else if (response.status === 404) {
+          setError("Issue not found");
+        } else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
       setIssues(issues.filter((issue) => issue.id !== issueId));
@@ -84,8 +89,13 @@ function IssuesPage() {
         userId,
       );
       if (!response.ok) {
-        setError(`You are not authorized to create this issue: ${response.statusText}`
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to create this issue");
+        } else if (response.status === 400) {
+          setError("Invalid request");
+        } else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
 
@@ -112,8 +122,15 @@ function IssuesPage() {
     try {
       const response = await assignDeveloperToIssue(issueId, developerId);
       if (!response.ok) {
-        setError(`You are not authorized to assign a developer to this issue: ${response.statusText}`
-        );
+        if (response.status === 403) {
+          setError("You are not authorized to assign a developer to this issue");
+        }
+        else if (response.status === 404) {
+          setError("Issue or developer not found");
+        }
+        else {
+          setError("Something went wrong, please try again");
+        }
         return;
       }
       const updatedIssue = await response.json();

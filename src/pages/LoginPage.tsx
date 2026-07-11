@@ -25,9 +25,16 @@ function LoginPage() {
             const data = await response.json();
                 localStorage.setItem("token", data.token);
                 navigate("/dashboard");
-        } else {
+        } else  if (response.status === 401) {
             setError("Invalid username or password");
+        } else if (response.status === 400) {
+            setError("Invalid request");
+        }  else if (response.status === 500) {
+            setError("Server error, please try again later");
+        } else {
+            setError("Something went wrong, please try again");
         }
+
   };
 
   return (

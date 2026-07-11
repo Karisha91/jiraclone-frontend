@@ -123,3 +123,12 @@
     font-weight: 600;
     font-size: 0.85rem;
 }
+.audit-logs-error {
+    background-color: rgba(233, 69, 96, 0.1);
+    border: 1px solid #e94560;
+    color: #fca5a5;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
