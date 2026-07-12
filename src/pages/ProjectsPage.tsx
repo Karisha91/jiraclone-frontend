@@ -36,8 +36,11 @@ function ProjectsPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!projectName || !description) return;
+    e.preventDefault()
+    if (!projectName || !description) {
+      setError("Project name and description are required");
+      return;
+    }
 
     try {
       const response = await createProject(projectName, description);

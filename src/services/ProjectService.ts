@@ -35,7 +35,7 @@ export const deleteProject = async (id: number): Promise<Response> => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
         }
-        ,body: JSON.stringify({ name: projectName, description })
+        ,body: JSON.stringify({ projectName: projectName, description })
 
     });
 };

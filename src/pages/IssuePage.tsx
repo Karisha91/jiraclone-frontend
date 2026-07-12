@@ -63,7 +63,7 @@ function IssuePage() {
           },
           body: JSON.stringify({
             content: createComment,
-            issue: { id: issue?.id },
+            issueId: issue?.id
           }),
         },
       );

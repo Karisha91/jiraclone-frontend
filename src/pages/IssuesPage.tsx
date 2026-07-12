@@ -15,7 +15,7 @@ import {
   User,
   assignDeveloperToIssue,
 } from "../services/IssueService";
-import { getUserIdFromToken, getUsernameFromToken } from "../utils/auth";
+import { getUserIdFromToken, getUsernameFromToken,getUserRoleFromToken } from "../utils/auth";
 
 function IssuesPage() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -72,6 +72,7 @@ function IssuesPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,): Promise<void> => {
+    console.log(getUserRoleFromToken())
     e.preventDefault();
     if (!id) return;
     try {
