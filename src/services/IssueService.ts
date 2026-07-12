@@ -79,8 +79,8 @@ export const createIssue = async (title: string, description: string, status: St
             description,
             status,
             priority,
-            project: { id: id },
-            reporter: { id: reporterId }
+            projectId: id,
+            reporterId: reporterId
           }),
         });
 };
