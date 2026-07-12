@@ -73,9 +73,9 @@ http.put(`*/api/issues/:id/assign`, async ({ params, request }) => {
     })
 }),
     http.post(`*/api/projects`, async ({ request }) => {
-        const body = await request.json() as {name: string, description: string}
-        return HttpResponse.json({ id: 3, projectName: body.name, description: body.description })
-    }),
+    const body = await request.json() as {projectName: string, description: string}
+    return HttpResponse.json({ id: 3, projectName: body.projectName, description: body.description })
+}),
     http.get(`*/api/issues/:id`, ({ params }) => {
         const { id } = params
         return HttpResponse.json({id: 5, 
