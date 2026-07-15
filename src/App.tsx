@@ -11,6 +11,8 @@ import { Navigate } from "react-router-dom";
 import { useNotifications } from "./hooks/useNotifications";
 import { NotificationContext } from "./context/NotificationContext";
 import AuditLogsPage from "./pages/AuditLogsPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
     <NotificationContext.Provider value={{ notifications, markAsRead }}>
     <BrowserRouter>
       <Routes>
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element = {<ForgotPassword />} />
         <Route path="/admin/audit-logs" element={
           <ProtectedRoute>
             <AuditLogsPage />
