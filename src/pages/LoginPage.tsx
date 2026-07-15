@@ -67,6 +67,7 @@ function LoginPage() {
   <button type="submit">Login</button>
 </form>
       <Link to="/register">Don't have an account? <span>Register</span></Link>
+      <Link to="/forgot-password">Forgot password? <span></span></Link>
       </div>
     </div>
   );

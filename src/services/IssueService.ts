@@ -68,6 +68,7 @@ export const deleteIssue = async (issueId: number): Promise<Response> => {
 };
 
 export const createIssue = async (title: string, description: string, status: Status, priority: Priority, id: number, reporterId: number): Promise<Response> => {
+  
     return fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
           method: "POST",
           headers: {
