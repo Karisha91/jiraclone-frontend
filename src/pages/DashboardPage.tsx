@@ -1,10 +1,12 @@
 
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar'
-import { getProjects, Project } from '../services/ProjectService';
-import { getAllIssues, Issue } from '../services/IssueService';
+import { Project } from '../services/ProjectService';
+import { getAllIssuesByWorkspaceId, Issue } from '../services/IssueService';
 import "./DashboardPage.css";
 import { Link } from 'react-router-dom';
+import { getAllProjectsByWorkspaceId } from '../services/WorkspaceService';
+import { useParams } from "react-router-dom";
 
 function DashboardPage() {
 
@@ -15,13 +17,15 @@ function DashboardPage() {
     const payload = token ? token.split('.')[1] : ''
     const decoded = payload ? JSON.parse(atob(payload)) : { sub: 'User' }
 
+    const { workspaceId } = useParams<{ workspaceId: string }>();
+
 
     useEffect(() => {
-        getProjects()
+        getAllProjectsByWorkspaceId(Number(workspaceId))
         .then(data => setProjects(data))
     }, [])
     useEffect(() => {
-        getAllIssues()
+         getAllIssuesByWorkspaceId(Number(workspaceId))
         .then(data => setIssues(data))
     }, [])
 

@@ -1,0 +1,61 @@
+.workspace-container {
+    min-height: calc(100vh - 60px);
+    background-color: #0f172a;
+    padding: 40px;
+}
+
+.workspace-header {
+    margin-bottom: 32px;
+}
+
+.workspace-header h1 {
+    color: #f1f5f9;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+
+.workspace-header p {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.workspace-card {
+    background: #1e293b;
+    border: 1px solid #2e3d4f;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.workspace-card:hover {
+    border-color: #e94560;
+    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.1);
+}
+
+.workspace-card a {
+    color: #f1f5f9;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.workspace-card a:hover {
+    color: #e94560;
+}
+
+.workspace-empty {
+    color: #64748b;
+    font-size: 0.9rem;
+}

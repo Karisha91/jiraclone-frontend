@@ -2,7 +2,7 @@ export interface Project {
     id: number;
     projectName: string;
     description: string;
-    owner: string;
+    workspaceId: number
 }
 
 
@@ -28,14 +28,14 @@ export const deleteProject = async (id: number): Promise<Response> => {
     });
   };
 
-  export const createProject = async (projectName: string, description: string): Promise<Response> => {
+  export const createProject = async (projectName: string, description: string, workspaceId: number): Promise<Response> => {
     return fetch(`${import.meta.env.VITE_API_URL}/api/projects`, {
       method: "POST",
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
         }
-        ,body: JSON.stringify({ projectName: projectName, description })
+        ,body: JSON.stringify({ projectName: projectName, description, workspaceId })
 
     });
 };
