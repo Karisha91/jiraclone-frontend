@@ -74,8 +74,10 @@ function ProjectsPage() {
 
   useEffect(() => {
     if (workspaceId) {
+        setLoading(true);
         getAllProjectsByWorkspaceId(Number(workspaceId)).then((data) => {
             setProjects(data);
+            setLoading(false);
         });
     }
 }, [workspaceId]);

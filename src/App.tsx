@@ -35,7 +35,7 @@ function App() {
             <SettingsPage />
           </ProtectedRoute>
         } />
-        <Route path="workspace" element={
+        <Route path="/workspace" element={
           <ProtectedRoute>
             <Workspace />
           </ProtectedRoute>
