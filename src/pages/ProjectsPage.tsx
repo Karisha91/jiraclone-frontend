@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./Projects.css";
 import {
   deleteProject,
   createProject,
-  getProjects,
   Project,
 } from "../services/ProjectService";
+import { getAllProjectsByWorkspaceId } from "../services/WorkspaceService";
 
 function ProjectsPage() {
   const [projectName, setProjectName] = useState("");
@@ -15,6 +16,7 @@ function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const handleDelete = async (id: number) => {
     try {
@@ -29,7 +31,7 @@ function ProjectsPage() {
         }
         return;
       }
-      setProjects(projects.filter((project) => project.id !== id));
+      setProjects(prev => prev.filter((project) => project.id !== id));
     } catch (error: unknown) {
       setError(`Error deleting project: ${error}`);
     }
@@ -41,9 +43,9 @@ function ProjectsPage() {
       setError("Project name and description are required");
       return;
     }
-
-    try {
-      const response = await createProject(projectName, description);
+    if (workspaceId) {
+      try {
+      const response = await createProject(projectName, description, Number(workspaceId));
 
       if (!response.ok) {
         if (response.status === 403) {
@@ -65,15 +67,20 @@ function ProjectsPage() {
     } catch (error: unknown) {
       setError(`Error creating project: ${error}`);
     }
+    }
+
+    
   };
 
   useEffect(() => {
-    setLoading(true);
-    getProjects().then((data) => {
-      setProjects(data);
-      setLoading(false);
-    });
-  }, []);
+    if (workspaceId) {
+        setLoading(true);
+        getAllProjectsByWorkspaceId(Number(workspaceId)).then((data) => {
+            setProjects(data);
+            setLoading(false);
+        });
+    }
+}, [workspaceId]);
 
   return (
     <div>

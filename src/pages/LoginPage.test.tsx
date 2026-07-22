@@ -21,7 +21,7 @@ describe('LoginPage', () => {
     expect(screen.getByText('Invalid username or password')).toBeInTheDocument()
     
   })
-  test('should redirect to dashboard on successful login', async () => {
+  test('should redirect to workspace on successful login', async () => {
     server.use(
   http.post('*/api/auth/login', () => {
     return HttpResponse.json(
@@ -35,7 +35,7 @@ const user = userEvent.setup()
     await user.type(screen.getByPlaceholderText(/username/i), 'user')
     await user.type(screen.getByPlaceholderText(/password/i), 'password')
     await user.click(screen.getByRole('button', {name: /login/i}))
-    expect(await screen.findByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /^workspace$/i })).toBeInTheDocument()
   })
   test('should redirect to Register page', async () => {
     render(<App />)

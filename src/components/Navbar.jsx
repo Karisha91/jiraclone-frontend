@@ -12,7 +12,8 @@ function Navbar() {
   const navigate = useNavigate();
 
   const user = getUserRoleFromToken();
-  
+
+  const workspaceId = localStorage.getItem("workspaceId");
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -36,8 +37,12 @@ function Navbar() {
     <div className="navbar">
       <span className="navbar-brand">Jira clone</span>
       <div className="navbar-links">
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/projects">Projects</Link>
+        <Link to={"/workspace"}>Workspaces</Link>
+        {workspaceId && (
+          <Link to={`/workspace/${workspaceId}/dashboard`}>Dashboard</Link>
+        )}{workspaceId && (
+          <Link to={`/workspace/${workspaceId}/settings`}>Settings</Link>
+        )}
       </div>
       <div
         className="navbar-bell"
@@ -45,26 +50,36 @@ function Navbar() {
         onClick={() => setIsOpen(!isOpen)}
       >
         Notifications
-        {notifications.filter(n => !n.isRead).length > 0 && (
-          <span className="navbar-badge">{notifications.filter(n => !n.isRead).length}</span>
+        {notifications.filter((n) => !n.isRead).length > 0 && (
+          <span className="navbar-badge">
+            {notifications.filter((n) => !n.isRead).length}
+          </span>
         )}
         {isOpen && (
           <div className="navbar-dropdown">
             {notifications.length === 0 ? (
               <p className="navbar-dropdown-empty">No notifications</p>
             ) : (
-              notifications.slice().sort((a, b) => b.id - a.id).map((notification, index) => (
-                <div className={notification.isRead ? "navbar-dropdown-item" : "navbar-dropdown-item unread"}
-                  key={index}
-                  onClick={() => {
-                    markAsRead(notification.id);
-                    setIsOpen(false);
-                    navigate(`/issues/${notification.issueId}`);
-                  }}
-                >
-                  {notification.message}
-                </div>
-              ))
+              notifications
+                .slice()
+                .sort((a, b) => b.id - a.id)
+                .map((notification, index) => (
+                  <div
+                    className={
+                      notification.isRead
+                        ? "navbar-dropdown-item"
+                        : "navbar-dropdown-item unread"
+                    }
+                    key={index}
+                    onClick={() => {
+                      markAsRead(notification.id);
+                      setIsOpen(false);
+                      navigate(`/issues/${notification.issueId}`);
+                    }}
+                  >
+                    {notification.message}
+                  </div>
+                ))
             )}
           </div>
         )}

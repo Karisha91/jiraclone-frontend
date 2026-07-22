@@ -125,8 +125,8 @@ export const getCommentsByIssueId = async (id: number, page: number = 0, size: n
     });
 }
 
-export const getAllIssues = async (): Promise<Issue[]> => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues`, {
+export const getAllIssuesByWorkspaceId = async (workspaceId: number): Promise<Issue[]> => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/workspace/${workspaceId}/issues`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }

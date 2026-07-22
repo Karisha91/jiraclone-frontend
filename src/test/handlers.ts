@@ -22,7 +22,9 @@ const fakeDevelopers = [
     { id: 1, username: "Marko" },
     { id: 2, username: "Petar" }
 ]
-
+const fakeWorkspaces = [
+    { id: 1, name: "FakeWorkspace1", description: "FakeDesc", createdAt: "2026-05-03T10:00:00", owner: { id: 1, username: "Ivan" }, members: [], projects: [] }
+]
 
 
 export const handlers = [
@@ -32,6 +34,9 @@ export const handlers = [
            { status: 401}
         )
         }),
+        http.get(`*/api/workspace`, () => {
+    return HttpResponse.json(fakeWorkspaces)
+}),
 
     http.post(`*/api/auth/register`,() => {
         return HttpResponse.json(
@@ -39,6 +44,12 @@ export const handlers = [
            { status: 400}
         )
     }),
+    http.get(`*/api/workspace/:workspaceId/projects`, () => {
+    return HttpResponse.json(fakeProjects)
+}),
+http.get(`*/api/workspace/:workspaceId/issues`, () => {
+    return HttpResponse.json(fakeIssues)
+}),
 
     http.get(`*/api/projects`, () => {
         return HttpResponse.json(fakeProjects)
@@ -138,4 +149,5 @@ http.delete('*/api/issues/:id', ({ params }) => {
         { status: 200 }
     )
 })
+
 ]

@@ -24,7 +24,7 @@ function LoginPage() {
         if (response.ok) {
             const data = await response.json();
                 localStorage.setItem("token", data.token);
-                navigate("/dashboard");
+                navigate("/workspace");
         } else  if (response.status === 401) {
             setError("Invalid username or password");
         } else if (response.status === 400) {
