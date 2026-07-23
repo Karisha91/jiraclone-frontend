@@ -17,6 +17,7 @@ function WorkspacePage() {
 
 
   const handleDelete = async (workspaceId: number) => {
+    setError(null)
     try {
       const response = await deleteWorkspace(workspaceId)
       if (!response.ok) {
@@ -37,7 +38,9 @@ function WorkspacePage() {
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    
       e.preventDefault()
+      setError(null)
       if (!workspaceName || !description) {
         setError("Workspace name and description are required");
         return;
@@ -112,7 +115,7 @@ function WorkspacePage() {
           ))}
         </div>
         {error && <p className="error-message">{error}</p>}
-        <div className="add-project-form">
+        <div className="add-workspace-form">
           <h3>Create your workspace</h3>
           <form onSubmit={handleSubmit}>
             <input
