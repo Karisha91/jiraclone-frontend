@@ -59,3 +59,57 @@
     color: #64748b;
     font-size: 0.9rem;
 }
+.add-workspace-form {
+    background: #1e293b;
+    border: 1px solid #2e3d4f;
+    border-radius: 10px;
+    padding: 24px;
+    max-width: 480px;
+}
+
+.add-workspace-form h3 {
+    color: #f1f5f9;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+}
+
+.add-workspace-form input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #2e3d4f;
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+}
+
+.add-workspace-form input:focus {
+    border-color: #e94560;
+}
+
+.add-workspace-form input::placeholder {
+    color: #475569;
+}
+
+.add-workspace-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #e94560;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 4px;
+}
+
+.add-workspace-form button:hover {
+    background-color: #c73652;
+}

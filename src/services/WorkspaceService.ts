@@ -54,18 +54,19 @@ export const getAllProjectsByWorkspaceId = async (workspaceId: number): Promise<
 }
 
 
-export const addMemberToWorkspace = async (workspaceId: number, userId: number, username: string): Promise<MemberSummary> => {
+export const addMemberToWorkspace = async (workspaceId: number, username: string): Promise<Response> => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/workspace/${workspaceId}/members`, {
+        method: "POST",
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            id: userId,
+            
             username: username
         })
     });
-    return response.json();
+    return response;
 }
 
 export const getWorkspace = async (workspaceId: number): Promise<Workspace> => {
