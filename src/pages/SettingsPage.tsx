@@ -10,37 +10,34 @@ import {
 import { useParams } from "react-router-dom";
 import "./SettingsPage.css";
 import AddMemberForm from "./AddMemberForm";
+import toast from 'react-hot-toast';
 
 function SettingsPage() {
   const [members, setMembers] = useState<MemberSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const { workspaceId } = useParams<{ workspaceId: string }>();
-  const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState("");
 
-  const onSuccess = (username: string) => {
-    setSuccessMsg(`Successfully added ${username}!`);
-    setTimeout(() => setSuccessMsg(""), 3000);
-  };
+
 
   const handleRemoveMember = async (username: string) => {
     try {
       const response = await removeMember(Number(workspaceId), username);
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to delete this member");
+          toast.error("You are not authorized to delete this member");
         } else if (response.status === 404) {
-          setError("Member not found");
+          toast.error("Member not found");
         } else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
       }
+      toast.success("Member removed from workspace!")
       setMembers((prev) =>
         prev.filter((member) => member.username !== username),
       );
     } catch (error: unknown) {
-      setError(`Error removing member: ${error}`);
+      toast.error(`Error removing member: ${error}`);
     }
   };
 
@@ -52,21 +49,22 @@ function SettingsPage() {
       );
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to add this member");
+          toast.error("You are not authorized to add this member");
         } else if (response.status === 404) {
-          setError("Member not found");
+          toast.error("Member not found");
         } else if (response.status === 409) {
-          setError("User is already a member of this workspace");
+          toast.error("User is already a member of this workspace");
         } else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return false;
       }
       const data = await response.json();
       setMembers((prev) => [...prev, data]);
+      toast.success(`${username} added to workspace!`)
       return true;
     } catch (error: unknown) {
-      setError(`Error adding member: ${error}`);
+      toast.error(`Error adding member: ${error}`);
       return false;
     }
   };
@@ -93,9 +91,7 @@ function SettingsPage() {
           <MembersTable onRemove={handleRemoveMember} members={members} />
         </div>
         <div>
-          {error && <p className="error-message">{error}</p>}
-          {successMsg && <p className="success-msg">{successMsg}</p>}
-          <AddMemberForm addMember={handleAddMember} onSuccess={onSuccess} />
+          <AddMemberForm addMember={handleAddMember} />
         </div>
       </div>
     </div>

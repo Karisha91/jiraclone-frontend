@@ -3,6 +3,14 @@ import { MemoryRouter } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import IssuePage from './IssuePage'
 import userEvent from '@testing-library/user-event'
+import toast from 'react-hot-toast'
+
+vi.mock('react-hot-toast', () => ({
+  default: {
+    error: vi.fn(),
+    success: vi.fn()
+  }
+}))
 
 describe('IssuePage', () => {
     test('should render issue page', () => {
@@ -93,6 +101,6 @@ describe('IssuePage', () => {
         await user.selectOptions(screen.getAllByRole('combobox')[0], 'DONE')
         await user.selectOptions(screen.getAllByRole('combobox')[1], 'MEDIUM')
         await user.click(screen.getByRole('button', {name: /Save Changes/i}))
-        expect(screen.getByText('Update successful')).toBeInTheDocument()
+        expect(toast.success).toHaveBeenCalledWith('Update successful')
     })
 })

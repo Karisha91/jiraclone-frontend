@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./LoginPage.css";
-
+import toast from 'react-hot-toast';
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("")
+
 
   const navigate = useNavigate();
 
@@ -23,18 +23,19 @@ function LoginPage() {
     });
         if (response.ok) {
             const data = await response.json();
+            toast.success("Login successful")
                 localStorage.setItem("token", data.token);
                 navigate("/workspace");
         } else  if (response.status === 401) {
-            setError("Invalid username or password");
+            toast.error("Invalid username or password");
         } else if (response.status === 400) {
-            setError("Invalid request");
+            toast.error("Invalid request");
         }  else if (response.status === 500) {
-            setError("Server error, please try again later");
+            toast.error("Server error, please try again later");
         } else if (response.status === 429) {
-            setError("Too many requests, please try again later");
+            toast.error("Too many requests, please try again later");
         } else {
-            setError("Something went wrong, please try again");
+            toast.error("Something went wrong, please try again");
         }
 
   };
@@ -46,7 +47,7 @@ function LoginPage() {
       
       <h1>Welcome back</h1>
       <p className="login-subtitle">Sign in to your account</p>
-      {error && <p className="login-error">{error}</p>}
+      
       <form onSubmit={handleSubmit}>
   <div className="login-field">
     <input

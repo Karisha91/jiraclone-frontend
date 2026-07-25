@@ -1,4 +1,4 @@
-import { render, screen} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import LoginPage from "./LoginPage"
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
@@ -6,42 +6,52 @@ import '@testing-library/jest-dom'
 import { http, HttpResponse } from 'msw'
 import { server } from '../test/server'
 import App from '../App.jsx'
+import toast from 'react-hot-toast'
+
+vi.mock('react-hot-toast', () => ({
+  default: {
+    error: vi.fn(),
+    success: vi.fn()
+  },
+  Toaster: () => null
+}))
 
 describe('LoginPage', () => {
   test('should render login form', () => {
     render(<MemoryRouter><LoginPage /></MemoryRouter>)
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
   })
+
   test('should show error message', async () => {
     render(<MemoryRouter><LoginPage /></MemoryRouter>)
     const user = userEvent.setup()
     await user.type(screen.getByPlaceholderText(/username/i), 'wrong user')
     await user.type(screen.getByPlaceholderText(/password/i), 'wrong password')
-    await user.click(screen.getByRole('button', {name: /login/i}))
-    expect(screen.getByText('Invalid username or password')).toBeInTheDocument()
-    
+    await user.click(screen.getByRole('button', { name: /login/i }))
+    expect(toast.error).toHaveBeenCalledWith('Invalid username or password')
   })
+
   test('should redirect to workspace on successful login', async () => {
     server.use(
-  http.post('*/api/auth/login', () => {
-    return HttpResponse.json(
-      { token: 'fake-jwt-token' },
-      { status: 200 }
+      http.post('*/api/auth/login', () => {
+        return HttpResponse.json(
+          { token: 'fake-jwt-token' },
+          { status: 200 }
+        )
+      })
     )
-  })
-)
-render(<App />)
-const user = userEvent.setup()
+    render(<App />)
+    const user = userEvent.setup()
     await user.type(screen.getByPlaceholderText(/username/i), 'user')
     await user.type(screen.getByPlaceholderText(/password/i), 'password')
-    await user.click(screen.getByRole('button', {name: /login/i}))
+    await user.click(screen.getByRole('button', { name: /login/i }))
     expect(await screen.findByRole('heading', { name: /^workspace$/i })).toBeInTheDocument()
   })
+
   test('should redirect to Register page', async () => {
     render(<App />)
     const user = userEvent.setup()
-    await user.click(await screen.findByRole('link', {name: /Don't have an account/i}))
+    await user.click(await screen.findByRole('link', { name: /Don't have an account/i }))
     expect(await screen.findByRole('heading', { name: /create account/i })).toBeInTheDocument()
   })
 })
-

@@ -3,10 +3,8 @@ import { useState } from "react";
 
 function AddMemberForm({
   addMember,
-  onSuccess,
 }: {
-  addMember: (username: string) => Promise<boolean>;
-  onSuccess: (onSuccess: string) => void;
+  addMember: (username: string) => Promise<boolean>
 }) {
   const [username, setUsername] = useState("");
 
@@ -18,11 +16,8 @@ function AddMemberForm({
         onSubmit={async (e) => {
           e.preventDefault();
           const success = await addMember(username);
-          console.log('====================================');
-          console.log(success);
-          console.log('====================================');
           if (success) {
-            onSuccess(username);
+        
             setUsername("");
           }
         }}

@@ -2,16 +2,17 @@ import Navbar from '../components/Navbar';
 import { useEffect, useState } from "react";
 import { AuditLog, getAuditLogs } from '../services/AuditService';
 import './AuditLogsPage.css';
+import toast from 'react-hot-toast';
 
 function AuditLogsPage() {
 
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    
 
     useEffect(() => {
     getAuditLogs()
         .then(data => setAuditLogs(data))
-        .catch(() => setError("Failed to load audit logs"));
+        .catch(() => toast.error("Failed to load audit logs"));
 }, []);
 
     return (
@@ -20,7 +21,7 @@ function AuditLogsPage() {
             <div className="audit-logs-header">
                 <h1>Audit Logs</h1>
             </div>
-            {error && <p className="audit-logs-error">{error}</p>}
+            
             {auditLogs.length === 0 ? (
                 <p className="audit-logs-empty">No audit logs available.</p>
             ) : (

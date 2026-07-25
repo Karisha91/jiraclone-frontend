@@ -15,7 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Workspace from "./pages/WorkspacePage";
 import SettingsPage from "./pages/SettingsPage";
-
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
@@ -27,8 +27,11 @@ function App() {
 
   const { notifications, markAsRead } = useNotifications(userId);
   return (
+    
     <NotificationContext.Provider value={{ notifications, markAsRead }}>
+      
     <BrowserRouter>
+    <Toaster position="top-right" />
       <Routes>
         <Route path="/workspace/:workspaceId/settings" element={
           <ProtectedRoute>

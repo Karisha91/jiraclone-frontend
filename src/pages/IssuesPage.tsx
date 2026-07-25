@@ -16,6 +16,8 @@ import {
   assignDeveloperToIssue,
 } from "../services/IssueService";
 import { getUserIdFromToken, getUsernameFromToken,getUserRoleFromToken } from "../utils/auth";
+import toast from 'react-hot-toast';
+
 
 function IssuesPage() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -33,7 +35,7 @@ function IssuesPage() {
   const [selectedDeveloperId, setSelectedDeveloperId] = useState<number | null>(
     null,
   );
-  const [error, setError] = useState<string | null>(null);
+  
   const [showMyIssues, setShowMyIssues] = useState(false);
   
   const defaultAvatarUrl = "https://wp.cskejsaren.se/wp-content/uploads/2026/05/CS2-Default-Knife.webp";
@@ -57,28 +59,29 @@ function IssuesPage() {
       const response = await deleteIssue(issueId);
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to delete this issue");
+          toast.error("You are not authorized to delete this issue");
         } else if (response.status === 404) {
-          setError("Issue not found");
+          toast.error("Issue not found");
         } else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
       }
+      toast.success("Issue removed!")
       setIssues(issues.filter((issue) => issue.id !== issueId));
     } catch (error: unknown) {
-      setError(`Error deleting issue: ${error}`);
+      toast.error(`Error deleting issue: ${error}`);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,): Promise<void> => {
-    console.log(getUserRoleFromToken())
+  
     e.preventDefault();
     if (!id) return;
     try {
       const userId = getUserIdFromToken();
       if (!userId) {
-        setError("User ID not found");
+        toast.error("User ID not found");
         return;
       }
       const response = await createIssue(
@@ -91,11 +94,11 @@ function IssuesPage() {
       );
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to create this issue");
+          toast.error("You are not authorized to create this issue");
         } else if (response.status === 400) {
-          setError("Invalid request");
+          toast.error("Invalid request");
         } else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
       }
@@ -103,12 +106,13 @@ function IssuesPage() {
       const newIssue = await response.json();
 
       setIssues([...issues, newIssue]);
+      toast.success("Issue created!")
       setTitle("");
       setDescription("");
       setFilter("ALL");
       setFilterPriority("ALL");
     } catch (error: unknown) {
-      setError(`Error creating issue: ${error}`);
+      toast.error(`Error creating issue: ${error}`);
     }
   };
 
@@ -124,22 +128,23 @@ function IssuesPage() {
       const response = await assignDeveloperToIssue(issueId, developerId);
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to assign a developer to this issue");
+          toast.error("You are not authorized to assign a developer to this issue");
         }
         else if (response.status === 404) {
-          setError("Issue or developer not found");
+          toast.error("Issue or developer not found");
         }
         else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
       }
       const updatedIssue = await response.json();
+      toast.success("Issue assigned!")
       setIssues(
         issues.map((issue) => (issue.id === issueId ? updatedIssue : issue)),
       );
     } catch (error: unknown) {
-      setError(`Error assigning developer: ${error}`);
+      toast.error(`Error assigning developer: ${error}`);
     }
   };
 
@@ -374,9 +379,8 @@ function IssuesPage() {
             Next
           </button>
         </div>
-        {error && 
-        <p className="error-message">{error}
-        </p>}
+        
+    
 
         <div className="add-issue-form">
           <h3>New Issue</h3>

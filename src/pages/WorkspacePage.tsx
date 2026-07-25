@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { createWorkspace, deleteWorkspace, getWorkspaces, Workspace } from "../services/WorkspaceService";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 
 function WorkspacePage() {
@@ -10,29 +11,30 @@ function WorkspacePage() {
   const [loading, setLoading] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
   const [description, setDescription] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  
 
 
 
 
 
   const handleDelete = async (workspaceId: number) => {
-    setError(null)
+    
     try {
       const response = await deleteWorkspace(workspaceId)
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to delete this project");
+          ("You are not authorized to delete this project");
         } else if (response.status === 404) {
-          setError("Project not found");
+          toast.error("Project not found");
         } else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
     }
     setWorkspaces(workspaces.filter((space) => space.id !== workspaceId));
+    toast.success("Workspace removed!")
   } catch (error: unknown) {
-      setError(`Error deleting project: ${error}`);
+      toast.error(`Error deleting project: ${error}`);
     }
   };
 
@@ -40,9 +42,9 @@ function WorkspacePage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     
       e.preventDefault()
-      setError(null)
+      
       if (!workspaceName || !description) {
-        setError("Workspace name and description are required");
+        toast.error("Workspace name and description are required");
         return;
       }
         try {
@@ -50,23 +52,24 @@ function WorkspacePage() {
 
         if (!response.ok) {
           if (response.status === 403) {
-            setError("You are not authorized to create a workspace");
+            toast.error("You are not authorized to create a workspace");
           }
           else if (response.status === 400) {
-            setError("Invalid workspace data");
+            toast.error("Invalid workspace data");
           }
           else {
-            setError("Something went wrong, please try again");
+           toast.error("Something went wrong, please try again");
           }
           return;
         }
   
         const data = await response.json();
         setWorkspaces([...workspaces, data]);
+        toast.success("Workspace created!")
         setWorkspaceName("");
         setDescription("");
       } catch (error: unknown) {
-        setError(`Error creating project: ${error}`);
+        toast.error(`Error creating project: ${error}`);
       }
       
   
@@ -114,7 +117,7 @@ function WorkspacePage() {
             </div>
           ))}
         </div>
-        {error && <p className="error-message">{error}</p>}
+        
         <div className="add-workspace-form">
           <h3>Create your workspace</h3>
           <form onSubmit={handleSubmit}>
