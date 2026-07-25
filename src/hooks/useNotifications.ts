@@ -12,7 +12,6 @@ export function useNotifications(userId: number | null) {
   useEffect(() => {
     if (!userId) return;
     getNotificationsByUserId(userId).then((data) => {
-    console.log(data);
     setNotifications(data);
 });
 

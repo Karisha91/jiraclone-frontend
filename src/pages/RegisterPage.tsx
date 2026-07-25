@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./LoginPage.css";
+import toast from 'react-hot-toast';
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("USER");
-  const [error, setError] = useState("");
+
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,16 +20,17 @@ function RegisterPage() {
       body: JSON.stringify({ username, password, email, role }),
     });
     if (response.ok) {
+      toast.success("Registration successfull")
       navigate("/login");
     } else if (response.status === 400) {
-      setError("Invalid registration data");
+      toast.error("Invalid registration data");
     } else if (response.status === 409) {
-      setError("Username or email already exists");
+      toast.error("Username or email already exists");
     } else if (response.status === 429) {
-      setError("Too many requests, please try again later");
+      toast.error("Too many requests, please try again later");
     }
     else {
-      setError("Something went wrong, please try again");
+      toast.error("Something went wrong, please try again");
     }
     
   };
@@ -38,7 +40,7 @@ function RegisterPage() {
       <div className="login-card">
         <h1>Create account</h1>
         <p className="login-subtitle">Join Jira Clone today</p>
-        {error && <p className="login-error">{error}</p>}
+      
         <form onSubmit={handleRegister}>
           <div className="login-field">
             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />

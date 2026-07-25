@@ -9,13 +9,13 @@ import {
   Project,
 } from "../services/ProjectService";
 import { getAllProjectsByWorkspaceId } from "../services/WorkspaceService";
+import toast from 'react-hot-toast';
 
 function ProjectsPage() {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const handleDelete = async (id: number) => {
@@ -23,24 +23,25 @@ function ProjectsPage() {
       const response = await deleteProject(id);
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to delete this project");
+          toast.error("You are not authorized to delete this project");
         } else if (response.status === 404) {
-          setError("Project not found");
+          toast.error("Project not found");
         } else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
       }
       setProjects(prev => prev.filter((project) => project.id !== id));
+      toast.success("Project deleted!")
     } catch (error: unknown) {
-      setError(`Error deleting project: ${error}`);
+      toast.error(`Error deleting project: ${error}`);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!projectName || !description) {
-      setError("Project name and description are required");
+      toast.error("Project name and description are required");
       return;
     }
     if (workspaceId) {
@@ -49,23 +50,24 @@ function ProjectsPage() {
 
       if (!response.ok) {
         if (response.status === 403) {
-          setError("You are not authorized to create a project");
+          toast.error("You are not authorized to create a project");
         }
         else if (response.status === 400) {
-          setError("Invalid project data");
+          toast.error("Invalid project data");
         }
         else {
-          setError("Something went wrong, please try again");
+          toast.error("Something went wrong, please try again");
         }
         return;
       }
 
       const data = await response.json();
       setProjects([...projects, data]);
+      toast.success("Project created!")
       setProjectName("");
       setDescription("");
     } catch (error: unknown) {
-      setError(`Error creating project: ${error}`);
+      toast.error(`Error creating project: ${error}`);
     }
     }
 
@@ -111,8 +113,6 @@ function ProjectsPage() {
             </div>
           ))}
         </div>
-
-        {error && <p className="error-message">{error}</p>}
 
         <div className="add-project-form">
           <h3>New Project</h3>
