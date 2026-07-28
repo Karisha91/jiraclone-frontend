@@ -65,7 +65,7 @@ function IssuePage() {
               className="back-btn"
               onClick={() => navigate(`/projects/${issue.projectId}/issues`)}
             >
-              ← Back to Issues
+               Back to Issues
             </button>
           )}
         </div>

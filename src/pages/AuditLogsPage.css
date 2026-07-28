@@ -1,6 +1,9 @@
 .audit-logs-container {
-    min-height: calc(100vh - 60px);
+    min-height: 100vh;
     background-color: #0f172a;
+}
+
+.audit-logs-content {
     padding: 40px;
 }
 
