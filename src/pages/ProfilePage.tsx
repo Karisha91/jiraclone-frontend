@@ -58,7 +58,7 @@ function ProfilePage() {
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/api/users/${userId}/upload`,
       {
-        method: "PUT",
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
