@@ -1,26 +1,25 @@
 import "./WorkspacePage.css";
 import { useEffect, useState } from "react";
-import { createWorkspace, deleteWorkspace, getWorkspaces, Workspace } from "../services/WorkspaceService";
+import {
+  createWorkspace,
+  deleteWorkspace,
+  getWorkspaces,
+  Workspace,
+} from "../services/WorkspaceService";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
-import toast from 'react-hot-toast';
-
+import toast from "react-hot-toast";
+import { ProjectSummary } from "../services/WorkspaceService";
 
 function WorkspacePage() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
   const [description, setDescription] = useState("");
-  
-
-
-
-
 
   const handleDelete = async (workspaceId: number) => {
-    
     try {
-      const response = await deleteWorkspace(workspaceId)
+      const response = await deleteWorkspace(workspaceId);
       if (!response.ok) {
         if (response.status === 403) {
           ("You are not authorized to delete this project");
@@ -30,51 +29,44 @@ function WorkspacePage() {
           toast.error("Something went wrong, please try again");
         }
         return;
-    }
-    setWorkspaces(workspaces.filter((space) => space.id !== workspaceId));
-    toast.success("Workspace removed!")
-  } catch (error: unknown) {
+      }
+      setWorkspaces(workspaces.filter((space) => space.id !== workspaceId));
+      toast.success("Workspace removed!");
+    } catch (error: unknown) {
       toast.error(`Error deleting project: ${error}`);
     }
   };
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    
-      e.preventDefault()
-      
-      if (!workspaceName || !description) {
-        toast.error("Workspace name and description are required");
+    e.preventDefault();
+
+    if (!workspaceName || !description) {
+      toast.error("Workspace name and description are required");
+      return;
+    }
+    try {
+      const response = await createWorkspace(workspaceName, description);
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          toast.error("You are not authorized to create a workspace");
+        } else if (response.status === 400) {
+          toast.error("Invalid workspace data");
+        } else {
+          toast.error("Something went wrong, please try again");
+        }
         return;
       }
-        try {
-        const response = await createWorkspace(workspaceName, description);
 
-        if (!response.ok) {
-          if (response.status === 403) {
-            toast.error("You are not authorized to create a workspace");
-          }
-          else if (response.status === 400) {
-            toast.error("Invalid workspace data");
-          }
-          else {
-           toast.error("Something went wrong, please try again");
-          }
-          return;
-        }
-  
-        const data = await response.json();
-        setWorkspaces([...workspaces, data]);
-        toast.success("Workspace created!")
-        setWorkspaceName("");
-        setDescription("");
-      } catch (error: unknown) {
-        toast.error(`Error creating project: ${error}`);
-      }
-      
-  
-      
-    };
+      const data = await response.json();
+      setWorkspaces([...workspaces, data]);
+      toast.success("Workspace created!");
+      setWorkspaceName("");
+      setDescription("");
+    } catch (error: unknown) {
+      toast.error(`Error creating project: ${error}`);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -100,24 +92,33 @@ function WorkspacePage() {
         <div className="workspace-grid">
           {workspaces.map((workspace) => (
             <div key={workspace.id} className="workspace-card">
-              <Link
-                to={`/workspace/${workspace.id}/projects`}
-                onClick={() =>
-                  localStorage.setItem("workspaceId", String(workspace.id))
-                }
-              >
-                {workspace.name}
-              </Link>
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(workspace.id)}
-              >
-                Delete
-              </button>
+              <div className="workspace-card-header">
+                <Link
+                  to={`/workspace/${workspace.id}/projects`}
+                  onClick={() =>
+                    localStorage.setItem("workspaceId", String(workspace.id))
+                  }
+                >
+                  {workspace.name}
+                </Link>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(workspace.id)}
+                >
+                  Delete
+                </button>
+              </div>
+              <div className="workspace-projects">
+                {workspace.projects.map((project) => (
+                  <div key={project.id} className="list-projects">
+                    {project.name}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
-        
+
         <div className="add-workspace-form">
           <h3>Create your workspace</h3>
           <form onSubmit={handleSubmit}>
