@@ -4,8 +4,8 @@ import { Priority } from '../services/IssueService'
 
 
 const fakeProjects = [
-    {id: 1, projectName: "FakeProject1", description: "FakeDesc" },
-    {id: 2, projectName: "FakeProject2", description: "FakeDesc2" }   
+    { id: 1, projectName: "FakeProject1", description: "FakeDesc", workspaceId: 1, issues: [] },
+    { id: 2, projectName: "FakeProject2", description: "FakeDesc2", workspaceId: 1, issues: [] }
 ]
 const fakeIssues = [
     {id: 1,title:"FakeTitle", description: "fakeDesc", status: "IN_REVIEW", priority: "LOW"},
@@ -85,7 +85,7 @@ http.put(`*/api/issues/:id/assign`, async ({ params, request }) => {
 }),
     http.post(`*/api/projects`, async ({ request }) => {
     const body = await request.json() as {projectName: string, description: string}
-    return HttpResponse.json({ id: 3, projectName: body.projectName, description: body.description })
+    return HttpResponse.json({ id: 3, projectName: body.projectName, description: body.description, workspaceId: 1, issues: [] })
 }),
     http.get(`*/api/issues/:id`, ({ params }) => {
         const { id } = params
