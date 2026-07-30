@@ -1,8 +1,12 @@
+import { Issue } from "../services/IssueService";
+
 export interface Project {
     id: number;
     projectName: string;
     description: string;
-    workspaceId: number
+    workspaceId: number;
+    issues: Issue[];
+
 }
 
 

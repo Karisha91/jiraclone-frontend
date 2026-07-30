@@ -9,7 +9,7 @@ import {
   Project,
 } from "../services/ProjectService";
 import { getAllProjectsByWorkspaceId } from "../services/WorkspaceService";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 function ProjectsPage() {
   const [projectName, setProjectName] = useState("");
@@ -31,58 +31,58 @@ function ProjectsPage() {
         }
         return;
       }
-      setProjects(prev => prev.filter((project) => project.id !== id));
-      toast.success("Project deleted!")
+      setProjects((prev) => prev.filter((project) => project.id !== id));
+      toast.success("Project deleted!");
     } catch (error: unknown) {
       toast.error(`Error deleting project: ${error}`);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!projectName || !description) {
       toast.error("Project name and description are required");
       return;
     }
     if (workspaceId) {
       try {
-      const response = await createProject(projectName, description, Number(workspaceId));
+        const response = await createProject(
+          projectName,
+          description,
+          Number(workspaceId),
+        );
 
-      if (!response.ok) {
-        if (response.status === 403) {
-          toast.error("You are not authorized to create a project");
+        if (!response.ok) {
+          if (response.status === 403) {
+            toast.error("You are not authorized to create a project");
+          } else if (response.status === 400) {
+            toast.error("Invalid project data");
+          } else {
+            toast.error("Something went wrong, please try again");
+          }
+          return;
         }
-        else if (response.status === 400) {
-          toast.error("Invalid project data");
-        }
-        else {
-          toast.error("Something went wrong, please try again");
-        }
-        return;
+
+        const data = await response.json();
+        setProjects([...projects, data]);
+        toast.success("Project created!");
+        setProjectName("");
+        setDescription("");
+      } catch (error: unknown) {
+        toast.error(`Error creating project: ${error}`);
       }
-
-      const data = await response.json();
-      setProjects([...projects, data]);
-      toast.success("Project created!")
-      setProjectName("");
-      setDescription("");
-    } catch (error: unknown) {
-      toast.error(`Error creating project: ${error}`);
     }
-    }
-
-    
   };
 
   useEffect(() => {
     if (workspaceId) {
-        setLoading(true);
-        getAllProjectsByWorkspaceId(Number(workspaceId)).then((data) => {
-            setProjects(data);
-            setLoading(false);
-        });
+      setLoading(true);
+      getAllProjectsByWorkspaceId(Number(workspaceId)).then((data) => {
+        setProjects(data);
+        setLoading(false);
+      });
     }
-}, [workspaceId]);
+  }, [workspaceId]);
 
   return (
     <div>
@@ -101,15 +101,24 @@ function ProjectsPage() {
         <div className="projects-grid">
           {projects.map((project) => (
             <div key={project.id} className="project-card">
-              <Link to={`/projects/${project.id}/issues`}>
-                {project.projectName}
-              </Link>
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(project.id)}
-              >
-                Delete
-              </button>
+              <div className="project-card-header">
+                <Link to={`/projects/${project.id}/issues`}>
+                  {project.projectName}
+                </Link>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(project.id)}
+                >
+                  Delete
+                </button>
+              </div>
+              <div className="project-issues">
+                {project.issues.map((issue) => (
+                  <div key={issue.id} className="list-issues">
+                    {issue.title}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
