@@ -6,7 +6,8 @@
 .profile-content {
     padding: 40px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-card {
@@ -54,31 +55,11 @@
 
 .profile-action-btn {
     flex: 1;
-    padding: 2px;
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-    display: block;
-}
-
-.profile-action-btn:hover {
-    background-color: #e94560;
-    color: white;
-}
-.profile-action-btn {
-    flex: 1;
     padding: 14px;
     background: transparent;
     border: none;
     color: #94a3b8;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -100,7 +81,7 @@
     border: none;
     border-left: 1px solid #2e3d4f;
     color: #94a3b8;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -113,7 +94,21 @@
     color: white;
 }
 
-.edit-username-card input {
+.edit-username-card,
+.change-password-card {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.edit-username-card h4,
+.change-password-card h4 {
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    margin: 0 0 12px 0;
+}
+
+.edit-username-card input,
+.change-password-card input {
     width: 100%;
     padding: 10px 14px;
     border-radius: 8px;
@@ -127,11 +122,13 @@
     transition: border-color 0.2s;
 }
 
-.edit-username-card input:focus {
+.edit-username-card input:focus,
+.change-password-card input:focus {
     border-color: #e94560;
 }
 
-.edit-username-card button {
+.edit-username-card button,
+.change-password-card button {
     width: 100%;
     padding: 10px;
     background-color: #e94560;
@@ -142,14 +139,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin-top: 4px;
 }
 
-.edit-username-card button:hover {
+.edit-username-card button:hover,
+.change-password-card button:hover {
     background-color: #c73652;
-}
-
-.edit-username-card h4 {
-    color: #f1f5f9;
-    font-size: 0.9rem;
-    margin: 0 0 12px 0;
 }
