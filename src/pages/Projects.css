@@ -167,3 +167,17 @@
     font-size: 0.85rem;
     margin-bottom: 20px;
 }
+.change-password-link {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 12px;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.change-password-link:hover {
+    color: #e94560;
+}

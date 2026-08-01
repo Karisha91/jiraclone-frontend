@@ -1,12 +1,10 @@
 import { getUserIdFromToken, getUsernameFromToken } from "../utils/auth";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useRef } from "react";
 import Navbar from "../components/Navbar";
 import "./ProfilePage.css";
 
 function ProfilePage() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const defaultAvatar =
     "https://wp.cskejsaren.se/wp-content/uploads/2026/05/CS2-Default-Knife.webp";
   const [currentUsername, setCurrentUsername] = useState(
@@ -16,6 +14,11 @@ function ProfilePage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [newUsername, setNewUsername] = useState<string>(currentUsername ?? "");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [isOldPasswordValid, setIsOldPasswordValid] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [repeatNewPassword, setRepeatNewPassword] = useState("");
 
   const getUserAvatar = async (userId: number) => {
     const response = await fetch(
@@ -26,8 +29,66 @@ function ProfilePage() {
         },
       },
     );
-    const url = await response.text();
-    return url;
+    return response.text();
+  };
+
+  const isPasswordValid = async (oldPassword: string): Promise<boolean> => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users/${userId}/valid-password`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ oldPassword }),
+        },
+      );
+      if (response.ok) {
+        const valid = await response.json();
+        if (valid) {
+          setIsOldPasswordValid(true);
+          setIsChangingPassword(false);
+          return true;
+        }
+        toast.error("Old password is incorrect");
+        setIsOldPasswordValid(false);
+        return false;
+      }
+      return false;
+    } catch {
+      setIsOldPasswordValid(false);
+      return false;
+    }
+  };
+
+  const changePassword = async (newPassword: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users/${userId}/change-password`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ newPassword }),
+        },
+      );
+      if (response.ok) {
+        const newToken = await response.text();
+        localStorage.setItem("token", newToken);
+        toast.success("Password updated");
+        setIsChangingPassword(false);
+        setIsOldPasswordValid(false);
+        setOldPassword("");
+        setNewPassword("");
+        setRepeatNewPassword("");
+      }
+    } catch {
+      toast.error("Failed to change password");
+    }
   };
 
   const changeUsername = async (newUsername: string) => {
@@ -58,7 +119,7 @@ function ProfilePage() {
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/api/users/${userId}/upload`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -66,7 +127,7 @@ function ProfilePage() {
       },
     );
     if (response.ok) {
-      toast.success("Avatar uploaded successful");
+      toast.success("Avatar uploaded successfully");
       return response.text();
     }
     toast.error("Failed to upload avatar");
@@ -91,9 +152,10 @@ function ProfilePage() {
               alt="Profile avatar"
               className="profile-avatar"
             />
-            {!isEditing && (
+            {!isEditing && !isChangingPassword && !isOldPasswordValid && (
               <h2 className="profile-username">{currentUsername}</h2>
             )}
+
             {isEditing && (
               <div className="edit-username-card">
                 <h4>Change username</h4>
@@ -108,7 +170,50 @@ function ProfilePage() {
                 </button>
               </div>
             )}
+
+            {isChangingPassword && (
+              <div className="change-password-card">
+                <h4>Enter old password</h4>
+                <input
+                  type="password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+                <button onClick={() => isPasswordValid(oldPassword)}>
+                  Verify
+                </button>
+              </div>
+            )}
+
+            {isOldPasswordValid && (
+              <div className="change-password-card">
+                <h4>New password</h4>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <h4>Repeat new password</h4>
+                <input
+                  type="password"
+                  value={repeatNewPassword}
+                  onChange={(e) => setRepeatNewPassword(e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    if (newPassword !== repeatNewPassword) {
+                      toast.error("Passwords do not match");
+                      return;
+                    }
+                    changePassword(newPassword);
+                  }}
+                >
+                  Apply
+                </button>
+              </div>
+            )}
           </div>
+
           <div className="profile-actions">
             <input
               type="file"
@@ -126,7 +231,24 @@ function ProfilePage() {
             <label htmlFor="avatar-upload" className="profile-action-btn">
               Upload Avatar
             </label>
-            <button onClick={() => setIsEditing(true)}>Change username</button>
+            <button
+              onClick={() => {
+                setIsEditing(true);
+                setIsChangingPassword(false);
+                setIsOldPasswordValid(false);
+              }}
+            >
+              Change Username
+            </button>
+            <button
+              onClick={() => {
+                setIsChangingPassword(true);
+                setIsEditing(false);
+                setIsOldPasswordValid(false);
+              }}
+            >
+              Change Password
+            </button>
           </div>
         </div>
       </div>
