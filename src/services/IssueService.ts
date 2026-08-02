@@ -23,6 +23,7 @@ export interface Issue {
     projectId: number;
     assigneeAvatarUrl?: string;
     reporterAvatarUrl?: string;
+    workspaceId: number;
 }
 export interface Comment {
     id: number;
