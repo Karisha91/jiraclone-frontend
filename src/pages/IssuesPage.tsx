@@ -15,9 +15,12 @@ import {
   User,
   assignDeveloperToIssue,
 } from "../services/IssueService";
-import { getUserIdFromToken, getUsernameFromToken,getUserRoleFromToken } from "../utils/auth";
-import toast from 'react-hot-toast';
-
+import {
+  getUserIdFromToken,
+  getUsernameFromToken,
+  getUserRoleFromToken,
+} from "../utils/auth";
+import toast from "react-hot-toast";
 
 function IssuesPage() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -35,24 +38,33 @@ function IssuesPage() {
   const [selectedDeveloperId, setSelectedDeveloperId] = useState<number | null>(
     null,
   );
-  
+
   const [showMyIssues, setShowMyIssues] = useState(false);
-  
-  const defaultAvatarUrl = "https://wp.cskejsaren.se/wp-content/uploads/2026/05/CS2-Default-Knife.webp";
+  const [workspaceId, setWorkspaceId] = useState<number | null>(null);
+
+  const defaultAvatarUrl =
+    "https://wp.cskejsaren.se/wp-content/uploads/2026/05/CS2-Default-Knife.webp";
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const filteredIssues = filter === "ALL" ? issues : issues.filter((issue) => issue.status === filter);
-  const filteredIssuesByPriority = filterPriority === "ALL" ? filteredIssues : filteredIssues.filter((issue) => issue.priority === filterPriority);
-  const filteredByAssignee = showMyIssues ? filteredIssuesByPriority.filter((issue) => { 
-   return issue.assigneeUsername === getUsernameFromToken()}) : filteredIssuesByPriority;
+  const filteredIssues =
+    filter === "ALL"
+      ? issues
+      : issues.filter((issue) => issue.status === filter);
+  const filteredIssuesByPriority =
+    filterPriority === "ALL"
+      ? filteredIssues
+      : filteredIssues.filter((issue) => issue.priority === filterPriority);
+  const filteredByAssignee = showMyIssues
+    ? filteredIssuesByPriority.filter((issue) => {
+        return issue.assigneeUsername === getUsernameFromToken();
+      })
+    : filteredIssuesByPriority;
 
   const handleToggleMyIssues = () => {
-    setShowMyIssues(prev => !prev);
+    setShowMyIssues((prev) => !prev);
   };
-
-  
 
   const handleDeleteIssue = async (issueId: number) => {
     try {
@@ -67,15 +79,16 @@ function IssuesPage() {
         }
         return;
       }
-      toast.success("Issue removed!")
+      toast.success("Issue removed!");
       setIssues(issues.filter((issue) => issue.id !== issueId));
     } catch (error: unknown) {
       toast.error(`Error deleting issue: ${error}`);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,): Promise<void> => {
-  
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     if (!id) return;
     try {
@@ -106,7 +119,7 @@ function IssuesPage() {
       const newIssue = await response.json();
 
       setIssues([...issues, newIssue]);
-      toast.success("Issue created!")
+      toast.success("Issue created!");
       setTitle("");
       setDescription("");
       setFilter("ALL");
@@ -123,23 +136,26 @@ function IssuesPage() {
     });
   };
 
-  const handleAssignDeveloper = async (issueId: number, developerId: number,) => {
+  const handleAssignDeveloper = async (
+    issueId: number,
+    developerId: number,
+  ) => {
     try {
       const response = await assignDeveloperToIssue(issueId, developerId);
       if (!response.ok) {
         if (response.status === 403) {
-          toast.error("You are not authorized to assign a developer to this issue");
-        }
-        else if (response.status === 404) {
+          toast.error(
+            "You are not authorized to assign a developer to this issue",
+          );
+        } else if (response.status === 404) {
           toast.error("Issue or developer not found");
-        }
-        else {
+        } else {
           toast.error("Something went wrong, please try again");
         }
         return;
       }
       const updatedIssue = await response.json();
-      toast.success("Issue assigned!")
+      toast.success("Issue assigned!");
       setIssues(
         issues.map((issue) => (issue.id === issueId ? updatedIssue : issue)),
       );
@@ -148,24 +164,21 @@ function IssuesPage() {
     }
   };
 
-  
-
-  
-
   useEffect(() => {
     setLoading(true);
     getIssuesByProjectId(Number(id), currentPage).then((data) => {
-      setTotalPages(data.totalPages);
-      setIssues(data.content);
-      setLoading(false);
+        setTotalPages(data.totalPages);
+        setIssues(data.content);
+        if (data.content.length > 0) {
+            setWorkspaceId(data.content[0].workspaceId);
+        }
+        setLoading(false);
     });
-  }, [id, currentPage]);
+}, [id, currentPage]);
 
   useEffect(() => {
     getDevelopers();
   }, []);
-
-    
 
   return (
     <div>
@@ -173,8 +186,13 @@ function IssuesPage() {
       <div className="issues-container">
         <div className="issues-header">
           <h1>Issues</h1>
-          <button className="back-btn" onClick={() => navigate("/projects")}>
-            ← Back to Projects
+          <button
+            className="back-btn"
+            onClick={() =>
+              workspaceId && navigate(`/workspace/${workspaceId}/projects`)
+            }
+          >
+            Back to Projects
           </button>
         </div>
 
@@ -248,14 +266,13 @@ function IssuesPage() {
                 Critical
               </button>
             </div>
-             <p className="filter-label">Assigned to me</p>
-             <button
-               className={`filter-btn ${showMyIssues ? "active" : ""}`}
-               onClick={handleToggleMyIssues}
-             >
-               My issues
-             </button>
-
+            <p className="filter-label">Assigned to me</p>
+            <button
+              className={`filter-btn ${showMyIssues ? "active" : ""}`}
+              onClick={handleToggleMyIssues}
+            >
+              My issues
+            </button>
           </div>
         </div>
 
@@ -266,15 +283,13 @@ function IssuesPage() {
 
         <div className="issues-list">
           {filteredByAssignee.map((issue) => (
-            
-            
             <div key={issue.id} className="issues-item">
               <img
-                  src={issue.reporterAvatarUrl || defaultAvatarUrl}
-                  alt={issue.reporterUsername}
-                  className="assignee-avatar"
-                />
-              
+                src={issue.reporterAvatarUrl || defaultAvatarUrl}
+                alt={issue.reporterUsername}
+                className="assignee-avatar"
+              />
+
               <Link to={`/issues/${issue.id}`}>{issue.title}</Link>
               <div className="issue-meta">
                 <span
@@ -307,9 +322,8 @@ function IssuesPage() {
                   {issue.assigneeUsername
                     ? `Assigned to: ${issue.assigneeUsername} `
                     : "Unassigned"}
-
                 </span>
-                
+
                 <img
                   src={issue.assigneeAvatarUrl || defaultAvatarUrl}
                   alt={issue.assigneeUsername}
@@ -379,8 +393,6 @@ function IssuesPage() {
             Next
           </button>
         </div>
-        
-    
 
         <div className="add-issue-form">
           <h3>New Issue</h3>
