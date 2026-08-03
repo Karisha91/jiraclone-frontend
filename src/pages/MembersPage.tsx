@@ -48,7 +48,11 @@ function MembersPage() {
         username,
       );
       if (!response.ok) {
-        if (response.status === 403) {
+        if (response.status === 401) {
+          const message = await response.text();
+          toast.error(message);
+        }
+       else if (response.status === 403) {
           toast.error("You are not authorized to add this member");
         } else if (response.status === 404) {
           toast.error("Member not found");
