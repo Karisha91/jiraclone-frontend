@@ -49,9 +49,13 @@ function WorkspacePage() {
 
       if (!response.ok) {
         if (response.status === 403) {
-          toast.error("You are not authorized to create a workspace");
+          const message = await response.text();
+          toast.error(message);
         } else if (response.status === 400) {
           toast.error("Invalid workspace data");
+        } else if (response.status === 401) {
+          const message = await response.text();
+          toast.error(message);
         } else {
           toast.error("Something went wrong, please try again");
         }
