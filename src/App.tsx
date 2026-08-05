@@ -18,6 +18,7 @@ import SettingsPage from "./pages/SettingsPage";
 import { Toaster } from 'react-hot-toast';
 import MembersPage from "./pages/MembersPage";
 import ProfilePage from "./pages/ProfilePage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
     <BrowserRouter>
     <Toaster position="top-right" />
       <Routes>
+        <Route path="/success" element={<PaymentSuccessPage />} />
         <Route path="/workspace/:workspaceId/settings" element={
           <ProtectedRoute>
             <SettingsPage />
