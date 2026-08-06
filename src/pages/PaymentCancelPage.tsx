@@ -33,10 +33,10 @@ export default function PaymentCancelPage() {
                     </div>
                 </div>
 
-                <button className="btn-primary" onClick={() => navigate("/workspaces")}>
+                <button className="btn-primary" onClick={() => navigate("/workspace")}>
                     Try again
                 </button>
-                <button className="btn-secondary" onClick={() => navigate("/workspaces")}>
+                <button className="btn-secondary" onClick={() => navigate("/workspace")}>
                     Go to workspaces
                 </button>
             </div>
