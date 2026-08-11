@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Workspace from "./pages/WorkspacePage";
 import SettingsPage from "./pages/SettingsPage";
+import BoardPage from "./pages/BoardPage";
 import { Toaster } from 'react-hot-toast';
 import MembersPage from "./pages/MembersPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -96,10 +97,18 @@ function App() {
           
 
         <Route
-          path="/projects/:id/issues"
+          path="/workspace/:workspaceId/projects/:id/issues"
           element={
             <ProtectedRoute>
               <IssuesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspace/:workspaceId/projects/:id/board"
+          element={
+            <ProtectedRoute>
+              <BoardPage />
             </ProtectedRoute>
           }
         />

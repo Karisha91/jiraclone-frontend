@@ -167,14 +167,14 @@ function IssuesPage() {
   useEffect(() => {
     setLoading(true);
     getIssuesByProjectId(Number(id), currentPage).then((data) => {
-        setTotalPages(data.totalPages);
-        setIssues(data.content);
-        if (data.content.length > 0) {
-            setWorkspaceId(data.content[0].workspaceId);
-        }
-        setLoading(false);
+      setTotalPages(data.totalPages);
+      setIssues(data.content);
+      if (data.content.length > 0) {
+        setWorkspaceId(data.content[0].workspaceId);
+      }
+      setLoading(false);
     });
-}, [id, currentPage]);
+  }, [id, currentPage]);
 
   useEffect(() => {
     getDevelopers();
@@ -193,6 +193,14 @@ function IssuesPage() {
             }
           >
             Back to Projects
+          </button>
+          <button
+            className="back-btn"
+            onClick={() =>
+              navigate(`/workspace/${workspaceId}/projects/${id}/board`)
+            }
+          >
+            Board view
           </button>
         </div>
 
