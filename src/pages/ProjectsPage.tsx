@@ -102,7 +102,7 @@ function ProjectsPage() {
           {projects.map((project) => (
             <div key={project.id} className="project-card">
               <div className="project-card-header">
-                <Link to={`/projects/${project.id}/issues`}>
+                <Link to={`/workspace/${workspaceId}/projects/${project.id}/issues`}>
                   {project.projectName}
                 </Link>
                 <button

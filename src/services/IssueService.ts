@@ -24,6 +24,7 @@ export interface Issue {
     assigneeAvatarUrl?: string;
     reporterAvatarUrl?: string;
     workspaceId: number;
+    position: number;
 }
 export interface Comment {
     id: number;
@@ -47,6 +48,17 @@ export interface User {
   username: string;
   avatarUrl: string;
 }
+
+
+export const getIssuesByProjectIdForBoard = async (projectId: number): Promise<Issue[]> => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/issues/${projectId}/board`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.json();
+
+      }
 
 
 export const getIssuesByProjectId = async (id: number,  page: number = 0, size: number = 10): Promise<PageResponse<Issue>> => {
