@@ -166,3 +166,16 @@ export const assignDeveloperToIssue = async (issueId: number, developerId: numbe
     body: JSON.stringify({ assigneeId: developerId }),
   });
 }
+
+export const moveIssueToStatus = async (issueId: number, newStatus: Status): Promise<Response> => {
+  return fetch(`${import.meta.env.VITE_API_URL}/api/issues/${issueId}/move`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status: newStatus, position: 0 }), 
+  });
+} 
+ 
+
